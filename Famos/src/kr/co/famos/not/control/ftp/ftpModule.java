@@ -141,6 +141,10 @@ public class ftpModule {
         List listFTP = new ArrayList();
 
         File dir = new File(folder);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        
         File[] fileList = dir.listFiles();
         for (int i = 0; i < fileList.length; i++) {
             File file = fileList[i];
@@ -155,7 +159,7 @@ public class ftpModule {
     public static boolean re_test_end_exit = false;
 
     public static void FtpServerSend(int re_set) {
-
+        
         List ll = subDirList(PathProperties.ftppre);
         FTPClient ftpClient = new FTPClient();
 
@@ -167,6 +171,8 @@ public class ftpModule {
             Iterator iterator = ll.iterator();
             while (iterator.hasNext()) {
                 String element = (String) iterator.next();
+                // ftpdir ==> /BETS/
+                // ftppre ==> E:\\EMCP\\BACKUP\\PRE_REPORT\\
                 ftpModule.put(ftpClient, PathProperties.ftpdir, PathProperties.ftppre, element);
             }
             

@@ -23,18 +23,23 @@ public class PathProperties {
     public static String ftpid;
     public static String ftppw;
     public static String ftpdir;
-    public static String ftpcancel;
+    
     public static String ftppre;
     public static String ftpport;
     public static String ftplocal;
-    public static String ftp_sub_bin;
-    public static String ftpcasi;
-    public static String ftp_main_bin;
-    public static String ftpchid;
     
-    public static String op_id_dir;
-    public static String local_08;
+    public static String lc_ng_bin;
+    public static String lc_main_bin;
+    public static String lc_casi_bin;
+    public static String lc_cancel_bin;
+    public static String lc_chid;
+    
+    public static String ftpcasi;
+    public static String local;
+    
     public static String local_Header;
+    
+    public static String lc_log;
     
     /* 프로퍼티 설정값 가져 오는 함수 */
     public void PropertiesSetting() {
@@ -43,21 +48,31 @@ public class PathProperties {
         try {
 
             props.load(new FileInputStream("setting.properties"));
-
-            ftpurl       = props.getProperty("ftpurl");
-            ftpid        = props.getProperty("ftpid");
-            ftppw        = props.getProperty("ftppw");
-            ftpdir       = props.getProperty("ftpdir");
-            ftpport      = props.getProperty("ftpport");
-            ftpcancel    = props.getProperty("ftpcancel");
-            ftppre       = props.getProperty("ftppre");
-            ftplocal     = props.getProperty("ftplocal");
-            ftp_sub_bin  = props.getProperty("ftp_sub_bin");
-            ftpcasi      = props.getProperty("ftpcasi");
-            ftp_main_bin = props.getProperty("ftp_main_bin");
-            ftpchid      = props.getProperty("ftpchid");
-            local_08     = props.getProperty("local_08");
-            local_Header = props.getProperty("local_Header");
+            // BETS FTP 정보
+            ftpurl          = props.getProperty("ftpurl");
+            ftpid           = props.getProperty("ftpid");
+            ftppw           = props.getProperty("ftppw");
+            ftpdir          = props.getProperty("ftpdir");
+            ftpport         = props.getProperty("ftpport");
+            ftplocal        = props.getProperty("ftplocal");
+            // 리포트 백업 
+            lc_ng_bin       = props.getProperty("lc_ng_bin");
+            lc_main_bin     = props.getProperty("lc_main_bin");
+            lc_casi_bin     = props.getProperty("lc_casi_bin");
+            lc_cancel_bin   = props.getProperty("lc_cancel_bin");
+            lc_chid         = props.getProperty("lc_chid");
+            // 칩데이터 사용할수도 있고, 안할수도 있고
+            lc_chid         = props.getProperty("lc_chid");
+            // GPIB 통신에서  가시데이터 저장
+            ftpcasi         = props.getProperty("ftpcasi");
+            // 공통 해더 정보
+            local_Header    = props.getProperty("local_Header");
+            // 로컬 저장 경로
+            local           = props.getProperty("local");
+            
+            ftppre          = props.getProperty("ftppre");
+            
+            lc_log          = props.getProperty("lc_log");
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

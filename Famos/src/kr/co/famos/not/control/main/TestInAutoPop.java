@@ -19,7 +19,10 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import kr.co.famos.not.control.util.CommonUtil;
+import kr.co.famos.not.control.util.GradientButton;
 import kr.co.famos.not.control.util.PathProperties;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 
 /**
  * <code>TestInAutoPop.java</code>
@@ -58,11 +61,12 @@ public class TestInAutoPop extends JDialog {
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         /* 프레임 화면 가운데 */
-        Dimension frameSize = parent.getSize();
+        Dimension frameSize = MainDual.main_frm_d.getSize();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-        setBounds((screenSize.width - frameSize.width / 3) / 2, (screenSize.height - frameSize.height / 3) / 2, 416, 253);
+        setBounds((screenSize.width - (frameSize.width / 2)) / 2, (screenSize.height - (frameSize.height / 2)) / 2, 416, 253);
         getContentPane().setLayout(new BorderLayout());
+        test_in_auto__parent_panel.setBackground(Color.WHITE);
         test_in_auto__parent_panel.setForeground(Color.RED);
         test_in_auto__parent_panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
@@ -71,28 +75,32 @@ public class TestInAutoPop extends JDialog {
         {
             JPanel test_in_auto_panel = new JPanel();
             test_in_auto_panel.setLayout(null);
-            test_in_auto_panel.setBackground(Color.LIGHT_GRAY);
+            test_in_auto_panel.setBackground(new Color(20, 86, 148));
             test_in_auto_panel.setBounds(7, 12, 384, 89);
             test_in_auto__parent_panel.add(test_in_auto_panel);
             {
                 JLabel test_in_auto_title_lb = new JLabel("HEAD A");
-                test_in_auto_title_lb.setFont(new Font("굴림", Font.BOLD, 17));
+                test_in_auto_title_lb.setForeground(Color.WHITE);
+                test_in_auto_title_lb.setFont(new Font("Tahoma", Font.BOLD, 17));
                 test_in_auto_title_lb.setBounds(156, 52, 72, 18);
                 test_in_auto_panel.add(test_in_auto_title_lb);
             }
             {
                 JLabel test_in_auto_header_lb = new JLabel("TEST_IN_AUTO");
-                test_in_auto_header_lb.setFont(new Font("굴림", Font.BOLD, 17));
-                test_in_auto_header_lb.setBounds(131, 17, 124, 18);
+                test_in_auto_header_lb.setForeground(Color.WHITE);
+                test_in_auto_header_lb.setFont(new Font("Tahoma", Font.BOLD, 17));
+                test_in_auto_header_lb.setBounds(131, 17, 137, 18);
                 test_in_auto_panel.add(test_in_auto_header_lb);
             }
         }
 
         JLabel test_in_auto_lb = new JLabel("LOT ID");
-        test_in_auto_lb.setBounds(15, 108, 108, 18);
+        test_in_auto_lb.setFont(new Font("Tahoma", Font.BOLD, 15));
+        test_in_auto_lb.setBounds(7, 108, 116, 18);
         test_in_auto__parent_panel.add(test_in_auto_lb);
 
         test_in_auto_text = new JTextField();
+        test_in_auto_text.setFont(new Font("Tahoma", Font.BOLD, 15));
         test_in_auto_text.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent e) {
                 String lot_no_check = test_in_auto_text.getText();
@@ -102,22 +110,25 @@ public class TestInAutoPop extends JDialog {
             }
         });
         test_in_auto_text.setColumns(10);
-        test_in_auto_text.setBounds(151, 108, 231, 24);
+        test_in_auto_text.setBounds(151, 108, 240, 24);
         test_in_auto__parent_panel.add(test_in_auto_text);
         {
             JPanel buttonPane = new JPanel();
-            buttonPane.setBounds(0, 168, 398, 35);
+            buttonPane.setBackground(Color.WHITE);
+            buttonPane.setForeground(Color.WHITE);
+            buttonPane.setBounds(7, 165, 384, 35);
             test_in_auto__parent_panel.add(buttonPane);
             buttonPane.setLayout(null);
             {
-                JButton test_in_auto_bt_ok = new JButton("OK");
+                JButton test_in_auto_bt_ok = new GradientButton("OK");
+                test_in_auto_bt_ok.setFont(new Font("Tahoma", Font.BOLD, 15));
                 test_in_auto_bt_ok.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
 
                         String input_not = test_in_auto_text.getText();
                         
                         if (input_not.length() < 10 || input_not.length() > 30) {
-                            operator_id_error_message.setText("! 10자리 이상 30자리 이하 입력 가능 합니다.");
+                            operator_id_error_message.setText("! You can input 10 digits or more and 30 digits or less.");
                         } else {
                             
                             CommonUtil cu = new CommonUtil();
@@ -141,29 +152,39 @@ public class TestInAutoPop extends JDialog {
                         }
                     }
                 });
-                test_in_auto_bt_ok.setBounds(89, 5, 53, 27);
+                test_in_auto_bt_ok.setBounds(80, 5, 66, 27);
                 test_in_auto_bt_ok.setActionCommand("OK");
                 buttonPane.add(test_in_auto_bt_ok);
                 getRootPane().setDefaultButton(test_in_auto_bt_ok);
             }
 
             {
-                JButton test_in_auto_bt_exit = new JButton("EXIT");
+                JButton test_in_auto_bt_exit = new GradientButton("EXIT");
+                test_in_auto_bt_exit.setFont(new Font("Tahoma", Font.BOLD, 15));
                 test_in_auto_bt_exit.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         dispose();
                         return;
                     }
                 });
-                test_in_auto_bt_exit.setBounds(231, 5, 77, 27);
+                test_in_auto_bt_exit.setBounds(226, 5, 77, 27);
                 test_in_auto_bt_exit.setActionCommand("Cancel");
                 buttonPane.add(test_in_auto_bt_exit);
             }
         }
 
         operator_id_error_message = new JLabel("");
+        operator_id_error_message.setHorizontalAlignment(SwingConstants.CENTER);
+        operator_id_error_message.setFont(new Font("Tahoma", Font.BOLD, 12));
         operator_id_error_message.setForeground(Color.RED);
-        operator_id_error_message.setBounds(15, 138, 367, 18);
+        operator_id_error_message.setBounds(7, 138, 384, 18);
         test_in_auto__parent_panel.add(operator_id_error_message);
+        {
+            JSeparator separator = new JSeparator();
+            separator.setForeground(Color.LIGHT_GRAY);
+            separator.setBackground(Color.WHITE);
+            separator.setBounds(7, 159, 384, 2);
+            test_in_auto__parent_panel.add(separator);
+        }
     }
 }

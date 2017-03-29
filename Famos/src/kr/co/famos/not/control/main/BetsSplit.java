@@ -18,10 +18,10 @@ public class BetsSplit {
         String[] values = allData.split("\n");
         for (int x = 1; x < (values.length - 1); x++) {
 
-            String StringNext = values[x].replaceAll("</[A-Za-z_]*>", "").replaceAll(">", "=").replaceAll("<", "").replaceAll("=$", "=-");
-
+            String StringNext = values[x].replaceAll("</[A-Za-z_0-9]*>", "").replaceAll(">", "=").replaceAll("<", "").replaceAll("=$", "=-");
+            
             String[] info = StringNext.split("=");
-
+            
             if (MainDual.main_radio_st1.isSelected()) {
                 MainDual.info_map_st1.put(info[0], info[1]);
             } else {

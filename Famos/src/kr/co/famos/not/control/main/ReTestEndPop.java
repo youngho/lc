@@ -8,33 +8,15 @@ import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import org.apache.commons.net.ftp.FTPClient;
-
-import kr.co.famos.not.control.ftp.FtpConnect;
-import kr.co.famos.not.control.ftp.ftpModule;
-import kr.co.famos.not.control.util.PathProperties;
+import kr.co.famos.not.control.util.GradientButton;
+import javax.swing.JSeparator;
 
 /**
  * <code>TestInManualPop.java</code>
@@ -69,11 +51,12 @@ public class ReTestEndPop extends JDialog {
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         /* 프레임 화면 가운데 */
-        Dimension frameSize = test_in_auto__parent_panel.getSize();
+        Dimension frameSize = MainDual.main_frm_d.getSize();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-        setBounds((screenSize.width - frameSize.width) / 3, (screenSize.height - frameSize.height) / 3, 416, 189);
+        setBounds((screenSize.width - (frameSize.width / 2)) / 2, (screenSize.height - (frameSize.height / 2)) / 2, 416, 203);
         getContentPane().setLayout(new BorderLayout());
+        test_in_auto__parent_panel.setBackground(Color.WHITE);
         test_in_auto__parent_panel.setForeground(Color.RED);
         test_in_auto__parent_panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
@@ -82,29 +65,33 @@ public class ReTestEndPop extends JDialog {
         {
             JPanel re_test_end_panel = new JPanel();
             re_test_end_panel.setLayout(null);
-            re_test_end_panel.setBackground(Color.LIGHT_GRAY);
+            re_test_end_panel.setBackground(new Color(20, 84, 148));
             re_test_end_panel.setBounds(7, 12, 384, 89);
             test_in_auto__parent_panel.add(re_test_end_panel);
             {
                 JLabel re_test_end_title_lb = new JLabel("HEAD A");
-                re_test_end_title_lb.setFont(new Font("굴림", Font.BOLD, 17));
+                re_test_end_title_lb.setForeground(Color.WHITE);
+                re_test_end_title_lb.setFont(new Font("Tahoma", Font.BOLD, 17));
                 re_test_end_title_lb.setBounds(156, 52, 71, 18);
                 re_test_end_panel.add(re_test_end_title_lb);
             }
             {
                 JLabel re_test_end_header_lb = new JLabel("RE-TEST_END");
-                re_test_end_header_lb.setFont(new Font("굴림", Font.BOLD, 17));
+                re_test_end_header_lb.setForeground(Color.WHITE);
+                re_test_end_header_lb.setFont(new Font("Tahoma", Font.BOLD, 17));
                 re_test_end_header_lb.setBounds(130, 17, 124, 18);
                 re_test_end_panel.add(re_test_end_header_lb);
             }
         }
         {
             JPanel buttonPane = new JPanel();
-            buttonPane.setBounds(17, 108, 367, 35);
+            buttonPane.setBackground(Color.WHITE);
+            buttonPane.setBounds(7, 113, 384, 35);
             test_in_auto__parent_panel.add(buttonPane);
             buttonPane.setLayout(null);
             {
-                JButton re_test_end_bt_ok = new JButton("OK");
+                JButton re_test_end_bt_ok = new GradientButton("OK");
+                re_test_end_bt_ok.setFont(new Font("Tahoma", Font.BOLD, 12));
                 re_test_end_bt_ok.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
 
@@ -121,7 +108,8 @@ public class ReTestEndPop extends JDialog {
             }
 
             {
-                JButton re_test_end_bt_exit = new JButton("EXIT");
+                JButton re_test_end_bt_exit = new GradientButton("EXIT");
+                re_test_end_bt_exit.setFont(new Font("Tahoma", Font.BOLD, 12));
                 re_test_end_bt_exit.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         dispose();
@@ -132,6 +120,13 @@ public class ReTestEndPop extends JDialog {
                 re_test_end_bt_exit.setActionCommand("Cancel");
                 buttonPane.add(re_test_end_bt_exit);
             }
+        }
+        {
+            JSeparator separator = new JSeparator();
+            separator.setBounds(7, 108, 384, 1);
+            test_in_auto__parent_panel.add(separator);
+            separator.setForeground(Color.LIGHT_GRAY);
+            separator.setBackground(Color.WHITE);
         }
     }
 }

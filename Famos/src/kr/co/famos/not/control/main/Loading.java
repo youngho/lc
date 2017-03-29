@@ -39,7 +39,7 @@ public class Loading extends JDialog {
         Dimension frameSize = parent.getSize();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         
-        setBounds((screenSize.width - (frameSize.width / 3)) / 2, (screenSize.height - (frameSize.height/3) ) / 2, 254, 193);
+        setBounds((screenSize.width - (frameSize.width / 3)) / 2, (screenSize.height - (frameSize.height/3) ) / 2, 143, 147);
         getContentPane().setLayout(new BorderLayout());
         loading_panel.setForeground(Color.RED);
         loading_panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -48,8 +48,9 @@ public class Loading extends JDialog {
         loading_panel.setLayout(null);
 
         JLabel loading_lb = new JLabel("");
-        loading_lb.setIcon(new ImageIcon(Loading.class.getResource("/kr/co/famos/not/control/ftp/img/loading_img.gif")));
-        loading_lb.setBounds(0, 0, 254, 194);
+        loading_lb.setBackground(Color.WHITE);
+        loading_lb.setIcon(new ImageIcon(Loading.class.getResource("/kr/co/famos/not/control/ftp/img/loading.gif")));
+        loading_lb.setBounds(0, 0, 143, 147);
         loading_panel.add(loading_lb);
         setUndecorated(true);
     }

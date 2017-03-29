@@ -19,7 +19,10 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import kr.co.famos.not.control.util.CommonUtil;
+import kr.co.famos.not.control.util.GradientButton;
 import kr.co.famos.not.control.util.PathProperties;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 
 /**
  * <code>PrePgmRestore.java</code>
@@ -54,11 +57,12 @@ public class PrePgmRestore extends JDialog {
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         /* 프레임 화면 가운데 */
-        Dimension frameSize = parent.getSize();
+        Dimension frameSize = MainDual.main_frm_d.getSize();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-        setBounds((screenSize.width - frameSize.width / 3) / 2, (screenSize.height - frameSize.height / 3) / 2, 416, 253);
+        setBounds((screenSize.width - (frameSize.width / 2)) / 2, (screenSize.height - (frameSize.height / 2)) / 2, 416, 253);
         getContentPane().setLayout(new BorderLayout());
+        test_in_auto__parent_panel.setBackground(Color.WHITE);
         test_in_auto__parent_panel.setForeground(Color.RED);
         test_in_auto__parent_panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
@@ -67,28 +71,32 @@ public class PrePgmRestore extends JDialog {
         {
             JPanel test_in_auto_panel = new JPanel();
             test_in_auto_panel.setLayout(null);
-            test_in_auto_panel.setBackground(Color.LIGHT_GRAY);
+            test_in_auto_panel.setBackground(new Color(20, 86, 148));
             test_in_auto_panel.setBounds(7, 12, 384, 89);
             test_in_auto__parent_panel.add(test_in_auto_panel);
             {
                 JLabel pre_pgm_restore_title_lb = new JLabel("HEAD A");
-                pre_pgm_restore_title_lb.setFont(new Font("굴림", Font.BOLD, 17));
+                pre_pgm_restore_title_lb.setForeground(Color.WHITE);
+                pre_pgm_restore_title_lb.setFont(new Font("Tahoma", Font.BOLD, 17));
                 pre_pgm_restore_title_lb.setBounds(156, 52, 72, 18);
                 test_in_auto_panel.add(pre_pgm_restore_title_lb);
             }
             {
                 JLabel pre_pgm_restore_header_lb = new JLabel("PRE_PGM_RESTORE");
-                pre_pgm_restore_header_lb.setFont(new Font("굴림", Font.BOLD, 17));
+                pre_pgm_restore_header_lb.setForeground(Color.WHITE);
+                pre_pgm_restore_header_lb.setFont(new Font("Tahoma", Font.BOLD, 17));
                 pre_pgm_restore_header_lb.setBounds(104, 17, 175, 18);
                 test_in_auto_panel.add(pre_pgm_restore_header_lb);
             }
         }
 
         JLabel pre_pgm_restore_lb = new JLabel("LOT ID");
+        pre_pgm_restore_lb.setFont(new Font("Tahoma", Font.BOLD, 15));
         pre_pgm_restore_lb.setBounds(15, 108, 108, 18);
         test_in_auto__parent_panel.add(pre_pgm_restore_lb);
 
         pre_pgm_restore_text = new JTextField();
+        pre_pgm_restore_text.setFont(new Font("Tahoma", Font.BOLD, 15));
         pre_pgm_restore_text.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent e) {
                 String lot_no_check = pre_pgm_restore_text.getText();
@@ -102,18 +110,20 @@ public class PrePgmRestore extends JDialog {
         test_in_auto__parent_panel.add(pre_pgm_restore_text);
         {
             JPanel buttonPane = new JPanel();
+            buttonPane.setBackground(Color.WHITE);
             buttonPane.setBounds(0, 168, 398, 35);
             test_in_auto__parent_panel.add(buttonPane);
             buttonPane.setLayout(null);
             {
-                JButton pre_pgm_restore_bt_ok = new JButton("OK");
+                JButton pre_pgm_restore_bt_ok = new GradientButton("OK");
+                pre_pgm_restore_bt_ok.setFont(new Font("Tahoma", Font.BOLD, 12));
                 pre_pgm_restore_bt_ok.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
 
                         String input_not = pre_pgm_restore_text.getText();
                         
                         if (input_not.length() < 10 || input_not.length() > 30) {
-                            operator_id_error_message.setText("! 10자리 이상 30자리 이하 입력 가능 합니다.");
+                            operator_id_error_message.setText("! You can input 10 digits or more and 30 digits or less.");
                         } else {
                             
                             CommonUtil cu = new CommonUtil();
@@ -127,43 +137,8 @@ public class PrePgmRestore extends JDialog {
                             }
                             
                             dispose();
-                            
                             task = new PrePgmRestoreProgress();
                             task.go();
-                            
-//                            if (MainDual.main_radio_st1.isSelected()) {
-//                                MainDual.main_lotno_text_st1.setText(cu.HederData(PathProperties.ftplocal, "lot_id_h1.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "lot_id_h1.dat").trim());
-//                                MainDual.main_partnumber_text_st1.setText(cu.HederData(PathProperties.ftplocal, "partnumber_h1.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "partnumber_h1.dat").trim());
-//                                MainDual.main_processcode_text_st1.setText(cu.HederData(PathProperties.ftplocal, "process_h1.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "process_h1.dat").trim());
-//                                MainDual.main_fab_text_st1.setText(cu.HederData(PathProperties.ftplocal, "fab_h1.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "fab_h1.dat").trim());
-//                                MainDual.main_grade_text_st1.setText(cu.HederData(PathProperties.ftplocal, "grade_h1.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "grade_h1.dat").trim());
-//                                MainDual.main_temp_text_st1.setText(cu.HederData(PathProperties.ftplocal, "temp_h1.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "temp_h1.dat").trim());
-//                                MainDual.main_qty_text_st1.setText(cu.HederData(PathProperties.ftplocal, "qty_h1.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "qty_h1.dat"));
-//
-//                                cu.FileNew(PathProperties.local_Header, "lot_id_h1.dat", input_not, false);
-//                                cu.FileNew(PathProperties.local_Header, "lc_seq_h1.dat", "PRE_PGM_RESTORE", false);
-//
-//                                // 로컬에 파일 데이터를 읽어와서 현재 버튼의 상태를 컨트롤 한다.
-//                                CommonUtil.ButtonConditionA();
-//                            } else {
-//
-//                                // 핸들러 2 상태
-//                                MainDual.main_lotno_text_st2.setText(cu.HederData(PathProperties.ftplocal, "lot_id_h2.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "lot_id_h2.dat").trim());
-//                                MainDual.main_partnumber_text_st2.setText(cu.HederData(PathProperties.ftplocal, "partnumber_h2.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "partnumber_h2.dat").trim());
-//                                MainDual.main_processcode_text_st2.setText(cu.HederData(PathProperties.ftplocal, "process_h2.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "process_h2.dat").trim());
-//                                MainDual.main_fab_text_st2.setText(cu.HederData(PathProperties.ftplocal, "fab_h2.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "fab_h2.dat").trim());
-//                                MainDual.main_grade_text_st2.setText(cu.HederData(PathProperties.ftplocal, "grade_h2.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "grade_h2.dat").trim());
-//                                MainDual.main_temp_text_st2.setText(cu.HederData(PathProperties.ftplocal, "temp_h2.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "temp_h2.dat").trim());
-//                                MainDual.main_qty_text_st2.setText(cu.HederData(PathProperties.ftplocal, "qty_h2.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "qty_h.dat"));
-//
-//                                cu.FileNew(PathProperties.local_Header, "lot_id_h2.dat", input_not, false);
-//                                cu.FileNew(PathProperties.local_Header, "lc_seq_h2.dat", "PRE_PGM_RESTORE", false);
-//
-//                                // 로컬에 파일 데이터를 읽어와서 현재 버튼의 상태를 컨트롤 한다.
-//                                CommonUtil.ButtonConditionB();
-//                            }
-                            
-                            dispose();
                         }
                     }
                 });
@@ -174,7 +149,8 @@ public class PrePgmRestore extends JDialog {
             }
 
             {
-                JButton pre_pgm_restore_bt_exit = new JButton("EXIT");
+                JButton pre_pgm_restore_bt_exit = new GradientButton("EXIT");
+                pre_pgm_restore_bt_exit.setFont(new Font("Tahoma", Font.BOLD, 12));
                 pre_pgm_restore_bt_exit.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         dispose();
@@ -188,8 +164,17 @@ public class PrePgmRestore extends JDialog {
         }
 
         operator_id_error_message = new JLabel("");
+        operator_id_error_message.setHorizontalAlignment(SwingConstants.CENTER);
+        operator_id_error_message.setFont(new Font("Tahoma", Font.BOLD, 12));
         operator_id_error_message.setForeground(Color.RED);
         operator_id_error_message.setBounds(15, 138, 367, 18);
         test_in_auto__parent_panel.add(operator_id_error_message);
+        {
+            JSeparator separator = new JSeparator();
+            separator.setForeground(Color.LIGHT_GRAY);
+            separator.setBackground(Color.WHITE);
+            separator.setBounds(7, 158, 384, 1);
+            test_in_auto__parent_panel.add(separator);
+        }
     }
 }

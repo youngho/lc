@@ -8,36 +8,19 @@ import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.JRadioButton;
+import javax.swing.JSeparator;
 import javax.swing.border.TitledBorder;
 
-import org.apache.commons.net.ftp.FTPClient;
-
-import kr.co.famos.not.control.ftp.FtpConnect;
-import kr.co.famos.not.control.ftp.ftpModule;
 import kr.co.famos.not.control.util.CommonUtil;
+import kr.co.famos.not.control.util.GradientButton;
 import kr.co.famos.not.control.util.PathProperties;
-import javax.swing.JRadioButton;
-import javax.swing.ButtonGroup;
 
 /**
  * <code>TestInManualPop.java</code>
@@ -76,11 +59,12 @@ public class TestInManualMode extends JDialog {
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         /* 프레임 화면 가운데 */
-        Dimension frameSize = parent.getSize();
+        Dimension frameSize = MainDual.main_frm_d.getSize();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-        setBounds((screenSize.width - frameSize.width / 3) / 2, (screenSize.height - frameSize.height / 3) / 2, 212, 245);
+        setBounds((screenSize.width - (frameSize.width / 2)) / 2, (screenSize.height - (frameSize.height / 2)) / 2, 224, 215);
         getContentPane().setLayout(new BorderLayout());
+        test_in_auto__parent_panel.setBackground(Color.WHITE);
         test_in_auto__parent_panel.setForeground(Color.RED);
         test_in_auto__parent_panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
@@ -88,11 +72,13 @@ public class TestInManualMode extends JDialog {
         test_in_auto__parent_panel.setLayout(null);
         {
             JPanel buttonPane = new JPanel();
-            buttonPane.setBounds(12, 151, 176, 35);
+            buttonPane.setBackground(Color.WHITE);
+            buttonPane.setBounds(12, 125, 184, 35);
             test_in_auto__parent_panel.add(buttonPane);
             buttonPane.setLayout(null);
             {
-                JButton test_mode_bt_ok = new JButton("OK");
+                JButton test_mode_bt_ok = new GradientButton("OK");
+                test_mode_bt_ok.setFont(new Font("Tahoma", Font.BOLD, 15));
                 test_mode_bt_ok.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         // 라디오 선택
@@ -135,62 +121,77 @@ public class TestInManualMode extends JDialog {
                         return;
                     }
                 });
-                test_mode_bt_ok.setBounds(15, 5, 53, 27);
+                test_mode_bt_ok.setBounds(14, 5, 65, 27);
                 test_mode_bt_ok.setActionCommand("OK");
                 buttonPane.add(test_mode_bt_ok);
                 getRootPane().setDefaultButton(test_mode_bt_ok);
             }
 
             {
-                JButton test_mode_bt_exit = new JButton("EXIT");
+                JButton test_mode_bt_exit = new GradientButton("EXIT");
+                test_mode_bt_exit.setFont(new Font("Tahoma", Font.BOLD, 15));
                 test_mode_bt_exit.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         dispose();
                         return;
                     }
                 });
-                test_mode_bt_exit.setBounds(83, 5, 77, 27);
+                test_mode_bt_exit.setBounds(93, 5, 77, 27);
                 test_mode_bt_exit.setActionCommand("Cancel");
                 buttonPane.add(test_mode_bt_exit);
             }
         }
         
         JLabel product_mode_lb = new JLabel("PRODUCT MODE");
-        product_mode_lb.setBounds(12, 17, 132, 18);
+        product_mode_lb.setFont(new Font("Tahoma", Font.BOLD, 15));
+        product_mode_lb.setBounds(12, 8, 149, 27);
         test_in_auto__parent_panel.add(product_mode_lb);
         
         product_mode_radio = new JRadioButton("");
+        product_mode_radio.setBackground(Color.WHITE);
         product_mode_radio.setSelected(true);
         buttonGroup_1.add(product_mode_radio);
-        product_mode_radio.setBounds(156, 10, 25, 27);
+        product_mode_radio.setBounds(171, 8, 25, 27);
         test_in_auto__parent_panel.add(product_mode_radio);
         
         JLabel qa_mode_lb = new JLabel("QA MODE");
-        qa_mode_lb.setBounds(12, 52, 132, 18);
+        qa_mode_lb.setFont(new Font("Tahoma", Font.BOLD, 15));
+        qa_mode_lb.setBounds(12, 33, 149, 27);
         test_in_auto__parent_panel.add(qa_mode_lb);
         
         JLabel maintance_mode_lb = new JLabel("MAINTANCE MODE");
-        maintance_mode_lb.setBounds(12, 87, 132, 18);
+        maintance_mode_lb.setFont(new Font("Tahoma", Font.BOLD, 15));
+        maintance_mode_lb.setBounds(12, 60, 149, 27);
         test_in_auto__parent_panel.add(maintance_mode_lb);
         
         JLabel engineer_mode_lb = new JLabel("ENGINEER MODE");
-        engineer_mode_lb.setBounds(12, 122, 132, 18);
+        engineer_mode_lb.setFont(new Font("Tahoma", Font.BOLD, 15));
+        engineer_mode_lb.setBounds(12, 86, 149, 27);
         test_in_auto__parent_panel.add(engineer_mode_lb);
         
         qa_mode_radio = new JRadioButton("");
+        qa_mode_radio.setBackground(Color.WHITE);
         buttonGroup_1.add(qa_mode_radio);
-        qa_mode_radio.setBounds(156, 47, 25, 27);
+        qa_mode_radio.setBounds(171, 33, 25, 27);
         test_in_auto__parent_panel.add(qa_mode_radio);
         
         maintance_mode_radio = new JRadioButton("");
+        maintance_mode_radio.setBackground(Color.WHITE);
         buttonGroup_1.add(maintance_mode_radio);
-        maintance_mode_radio.setBounds(156, 84, 25, 27);
+        maintance_mode_radio.setBounds(171, 60, 25, 27);
         test_in_auto__parent_panel.add(maintance_mode_radio);
         
         engineer_mode_radio = new JRadioButton("");
+        engineer_mode_radio.setBackground(Color.WHITE);
         buttonGroup_1.add(engineer_mode_radio);
-        engineer_mode_radio.setBounds(156, 121, 25, 27);
+        engineer_mode_radio.setBounds(171, 86, 25, 27);
         test_in_auto__parent_panel.add(engineer_mode_radio);
+        
+        JSeparator separator = new JSeparator();
+        separator.setForeground(Color.LIGHT_GRAY);
+        separator.setBackground(Color.WHITE);
+        separator.setBounds(16, 121, 180, 2);
+        test_in_auto__parent_panel.add(separator);
         
         if (MainDual.main_radio_st1.isSelected()) {
             if (MainDual.test_in_manual_mode_h1.equals("PRODUCT MODE")) {

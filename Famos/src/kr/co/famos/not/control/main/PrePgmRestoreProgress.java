@@ -53,6 +53,10 @@ public class PrePgmRestoreProgress {
                 cu.FileNew(PathProperties.local_Header, "test_input_h1.dat", "PRE", false);
                 // ----> 현재 LOT LOT_IN 시간.(LC에서 LOT_ID 입력후 OK button을 push한 시점)
                 cu.FileNew(PathProperties.local_Header, "lot_in_time_h1.dat", sdf.format(dt), false);
+                // 핸들러 A
+                cu.FileNew(PathProperties.local_Header, "head.dat", "A", false);
+                // 테스트모드
+                cu.FileNew(PathProperties.local_Header, "test_mode_h1.dat", MainDual.main_testmode_text_st1.getText() , false);
                 // LC가 BETS에 LOT_IN 통신 시점에서,BETS 서버에 LOT_ID 전송한 시점을 뺀값.
                 cu.FileNew(PathProperties.local_Header, "bets_in_time_h1.dat", "0" , false);
                 //  LC가 BETS로 부터 TEST PROGRAM을 받은 시점에서,LC가 BETS에 LOT 정보 통신 완료시점을  뺀값
@@ -64,6 +68,10 @@ public class PrePgmRestoreProgress {
                 cu.FileNew(PathProperties.local_Header, "test_input_h2.dat", "PRE", false);
                 // ----> 현재 LOT LOT_IN 시간.(LC에서 LOT_ID 입력후 OK button을 push한 시점)
                 cu.FileNew(PathProperties.local_Header, "lot_in_time_h2.dat", sdf.format(dt), false);
+                // 핸들러 B
+                cu.FileNew(PathProperties.local_Header, "head.dat", "B", false);
+                // 테스트모드
+                cu.FileNew(PathProperties.local_Header, "test_mode_h2.dat", MainDual.main_testmode_text_st2.getText(), false);
                 // LC가 BETS에 LOT_IN 통신 시점에서,BETS 서버에 LOT_ID 전송한 시점을 뺀값.
                 cu.FileNew(PathProperties.local_Header, "bets_in_time_h2.dat", "0" , false);
                 //  LC가 BETS로 부터 TEST PROGRAM을 받은 시점에서,LC가 BETS에 LOT 정보 통신 완료시점을  뺀값
@@ -84,24 +92,21 @@ public class PrePgmRestoreProgress {
                 }
 
                 if (MainDual.main_radio_st1.isSelected()) {
-
                     MainDual.main_lotno_text_st1.setText(MainDual.lot_no_st1);
-                    MainDual.main_partnumber_text_st1.setText(cu.HederData(PathProperties.ftplocal, "partnumber_h1.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "partnumber_h1.dat").trim());
-                    MainDual.main_processcode_text_st1.setText(cu.HederData(PathProperties.ftplocal, "process_h1.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "process_h1.dat").trim());
+                    MainDual.main_partnumber_text_st1.setText(cu.HederData(PathProperties.ftplocal, "part_number_h1.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "part_number_h1.dat").trim());
+                    MainDual.main_processcode_text_st1.setText(cu.HederData(PathProperties.ftplocal, "process_code_h1.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "process_code_h1.dat").trim());
                     MainDual.main_fab_text_st1.setText(cu.HederData(PathProperties.ftplocal, "fab_h1.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "fab_h1.dat").trim());
                     MainDual.main_grade_text_st1.setText(cu.HederData(PathProperties.ftplocal, "grade_h1.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "grade_h1.dat").trim());
-                    MainDual.main_temp_text_st1.setText(cu.HederData(PathProperties.ftplocal, "temp_h1.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "temp_h1.dat").trim());
-                    MainDual.main_qty_text_st1.setText(cu.HederData(PathProperties.ftplocal, "qty_h1.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "qty_h1.dat"));
-
+                    MainDual.main_temp_text_st1.setText(cu.HederData(PathProperties.ftplocal, "temperature_h1.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "temperature_h1.dat").trim());
+                    MainDual.main_qty_text_st1.setText(cu.HederData(PathProperties.ftplocal, "quantity_h1.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "quantity_h1.dat"));
                 } else {
                     MainDual.main_lotno_text_st2.setText(MainDual.lot_no_st2);
-                    MainDual.main_partnumber_text_st2.setText(cu.HederData(PathProperties.ftplocal, "partnumber_h2.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "partnumber_h2.dat").trim());
-                    MainDual.main_processcode_text_st2.setText(cu.HederData(PathProperties.ftplocal, "process_h2.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "process_h2.dat").trim());
+                    MainDual.main_partnumber_text_st2.setText(cu.HederData(PathProperties.ftplocal, "part_number_h2.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "part_number_h2.dat").trim());
+                    MainDual.main_processcode_text_st2.setText(cu.HederData(PathProperties.ftplocal, "process_code_h2.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "process_code_h2.dat").trim());
                     MainDual.main_fab_text_st2.setText(cu.HederData(PathProperties.ftplocal, "fab_h2.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "fab_h2.dat").trim());
                     MainDual.main_grade_text_st2.setText(cu.HederData(PathProperties.ftplocal, "grade_h2.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "grade_h2.dat").trim());
-                    MainDual.main_temp_text_st2.setText(cu.HederData(PathProperties.ftplocal, "temp_h2.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "temp_h2.dat").trim());
-                    MainDual.main_qty_text_st2.setText(cu.HederData(PathProperties.ftplocal, "qty_h2.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "qty_h2.dat"));
-
+                    MainDual.main_temp_text_st2.setText(cu.HederData(PathProperties.ftplocal, "temperature_h2.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "temperature_h2.dat").trim());
+                    MainDual.main_qty_text_st2.setText(cu.HederData(PathProperties.ftplocal, "quantity_h2.dat").trim().equals("0") ? "" : cu.HederData(PathProperties.ftplocal, "quantity_h2.dat"));
                 }
 
                 // SEQ4 1.BETS로 부터 전달 받은 Test Program을 T5503환경에 Up-Load실시
@@ -112,7 +117,10 @@ public class PrePgmRestoreProgress {
                 // ==> TEST PROGRAM 폴더 경로 설정 : exec "fscd
 
                 if (MainDual.main_radio_st1.isSelected()) {
-
+                    
+                    // String board_id = cu.executeRuntime("BOARD_ID");
+                    cu.FileNew(PathProperties.local_Header, "board_id_h1.dat", "0", false);
+                    
                     // cu.execExecution("fstmode --station 1 --auto");
                     MainDual.appendToPane(MainDual.main_log_textPane, "exec fstmode --station 1 --auto\n", Color.BLACK);
 
@@ -143,11 +151,12 @@ public class PrePgmRestoreProgress {
                     // 2.BETS로 부터 전달 받은 Test Program을 T5503 지정된 폴드에 Back-Up실시
                     // cu.execExecution("cp  -f *.pro *.mpa *.scr *.soc *.lib *.sub  /home/fsdiag/EMCP/BACKUP/PGM");
                     MainDual.appendToPane(MainDual.main_log_textPane, "cp  -f *.pro *.mpa *.scr *.soc *.lib *.sub  /home/fsdiag/EMCP/BACKUP/PGM \n", Color.BLACK);
-
-                    String stationOnOff = (String) MainDual.info_map_st1.get("FUNCTION KEY");
+                    
+                    System.out.println("function_key_h1.dat =====> " + cu.HederData(PathProperties.ftplocal, "function_key_h1.dat"));
+                    String stationOnOff = cu.HederData(PathProperties.ftplocal, "function_key_h1.dat");
 
                     if (stationOnOff != null) {
-                        for (int i = 0; i < 16; i++) {
+                        for (int i = 0; i < stationOnOff.length(); i++) {
                             if (stationOnOff.charAt(i) == 'Y') {
                                 // cu.execExecution("fsfk --station 1 --on " + (i+1));
                                 MainDual.appendToPane(MainDual.main_log_textPane, "exec fsfk --station 1 --on" + (i + 1) + " \n", Color.BLACK);
@@ -164,7 +173,10 @@ public class PrePgmRestoreProgress {
                     cu.FileNew(PathProperties.local_Header, "pgm_upload_time_h1.dat", pgm_upload_time_sdf.format(pgm_upload_time_dt), false);
 
                 } else {
-
+                    
+                    // String board_id = cu.executeRuntime("BOARD_ID");
+                    cu.FileNew(PathProperties.local_Header, "board_id_h2.dat", "0", false);
+                    
                     // Runtime.getRuntime().exec("fstmode --station 2 --auto");
                     MainDual.appendToPane(MainDual.main_log_textPane, "exec fstmode --station 2 --auto . \n", Color.BLACK);
 
@@ -185,18 +197,17 @@ public class PrePgmRestoreProgress {
                     // textArea.setText("exec cp /home/fsdiag/SBCAL/*.cal ." + "\r\n");
                     MainDual.appendToPane(MainDual.main_log_textPane, "exec cp /home/fsdiag/SBCAL/*.cal . \n", Color.BLACK);
 
-                    for (int i = 0; i < 16; i++) {
-                        String stationOnOff = (String) MainDual.info_map_st2.get("FUNCTION KEY");
+                    System.out.println("function_key_h2.dat =====> " + cu.HederData(PathProperties.ftplocal, "function_key_h2.dat"));
+                    String stationOnOff = cu.HederData(PathProperties.ftplocal, "function_key_h2.dat");
 
-                        System.out.println();
-
-                        if (stationOnOff != null) {
+                    if (stationOnOff != null) {
+                        for (int i = 0; i < stationOnOff.length(); i++) {
                             if (stationOnOff.charAt(i) == 'Y') {
-                                // Runtime.getRuntime().exec("fsfk --station 1 --on " + (i+1));
-                                MainDual.appendToPane(MainDual.main_log_textPane, "fsfk --station 1 --on " + (i + 1) + " \n", Color.BLACK);
+                                // cu.execExecution("fsfk --station 1 --on " + (i+1));
+                                MainDual.appendToPane(MainDual.main_log_textPane, "exec fsfk --station 1 --on" + (i + 1) + " \n", Color.BLACK);
                             } else {
-                                // Runtime.getRuntime().exec("fsfk --station 1 --off " + (i+1));
-                                MainDual.appendToPane(MainDual.main_log_textPane, "fsfk --station 1 --off " + (i + 1) + " \n", Color.BLACK);
+                                // cu.execExecution("fsfk --station 2 --off " + (i+1));
+                                MainDual.appendToPane(MainDual.main_log_textPane, "exec fsfk --station 2 --on" + (i + 1) + " \n", Color.BLACK);
                             }
                         }
                     }
@@ -207,104 +218,76 @@ public class PrePgmRestoreProgress {
                     cu.FileNew(PathProperties.local_Header, "pgm_upload_time_h2.dat", pgm_upload_time_sdf.format(pgm_upload_time_dt), false);
                 }
 
-                if ("off".equals(MainDual.srqkind)) {
+                if ("OFF".equals(MainDual.srqkind)) {
 
                     MainDual.main_test_in_auto_bt.setEnabled(false);
                     MainDual.main_test_in_manual_bt.setEnabled(false);
                     MainDual.main_re_test_end_bt.setEnabled(true);
                     MainDual.main_final_test_end_bt.setEnabled(true);
                     MainDual.main_pre_pgm_restore_bt.setEnabled(false);
-
                 }
 
+//                cu.executeRuntime("exec /home/fsdiag/GPIB/temp1 > H1TEMP.dat");
                 // Handler Temp Check (Interlock 기능)
                 // temp1.c  Library를 구동 시킨후 결과값을 H1TEMP.dat 파일로 담기
                 // temp1.c는 별도 개발 예정.(GPIB  SRQ)
 
-                //                String srq_handler_temp;
-                //                String srq_handler_map;
-                //                String srq_handler_para;
-                //                
-                //                
-                //String temp_dat = cu.execExecutionFile("/home/fsdiag/GPIB/temp1", "파일 있는 위치", "H1TEMP.dat");
-                //
-                //                MainDual.appendToPane(MainDual.main_log_textPane, "exec /home/fsdiag/GPIB/temp1 > H1TEMP.dat \n", Color.BLACK);
-                //
-                //                srq_handler_temp = "90";
-                //                // DUT MAP
-                //                srq_handler_map = "ASDF";
-                //                // PARA 
-                //                srq_handler_para = "256";
-
+//                String temp_dat = cu.FileReaderData("파일 있는 위치", "H1TEMP.dat", true);
+                
+                String gpib_handler_temp = "-32";
+                String gpib_handler_map = "DUT_MAP_128PARA";
+                
+                MainDual.appendToPane(MainDual.main_log_textPane, "exec /home/fsdiag/GPIB/temp1 > H1TEMP.dat \n", Color.BLACK);
+                
                 // ** 일단 주석 처리 : 온도 측정 하는 부분..     
                 // BETS 에서 내려온 정보 BETS_TEST_TEMP가 기준 정보
-                //                if (MainDual.main_radio_st1.isSelected()) {
-                //
-                //                    if ((Integer.parseInt((String) MainDual.info_map_st1.get("BETS_TEST_TEMP")) <= Integer.parseInt(srq_handler_temp)
-                //                            && Integer.parseInt(srq_handler_temp) <= ((Integer.parseInt((String) MainDual.info_map_st1.get("BETS_TEST_TEMP")) + 3)))
-                //                            || (Integer.parseInt((String) MainDual.info_map_st1.get("BETS_TEST_TEMP")) >= Integer.parseInt(srq_handler_temp)
-                //                                    && Integer.parseInt(srq_handler_temp) >= ((Integer.parseInt((String) MainDual.info_map_st1.get("BETS_TEST_TEMP")) - 3)))) {
-                //                        MainDual.appendToPane(MainDual.main_log_textPane, "handler_temp Inconsistency \n", Color.RED);
-                //                        JOptionPane.showMessageDialog(null, "Handler ERROR !!!!", "ERROR", JOptionPane.ERROR_MESSAGE);
-                //                        ld.setVisible(false);
-                //                        ld.dispose();
-                //                        return;
-                //                    }
-                //                    if ((Integer.parseInt((String) MainDual.info_map_st1.get("BETS_DUT_MAP")) <= Integer.parseInt(srq_handler_map)
-                //                            && Integer.parseInt(srq_handler_map) <= ((Integer.parseInt((String) MainDual.info_map_st1.get("BETS_DUT_MAP")) + 3)))
-                //                            || (Integer.parseInt((String) MainDual.info_map_st1.get("BETS_DUT_MAP")) >= Integer.parseInt(srq_handler_map)
-                //                                    && Integer.parseInt(srq_handler_map) >= ((Integer.parseInt((String) MainDual.info_map_st1.get("BETS_DUT_MAP")) - 3)))) {
-                //                        MainDual.appendToPane(MainDual.main_log_textPane, "handler_map Inconsistency \n", Color.RED);
-                //                        JOptionPane.showMessageDialog(null, "Handler ERROR !!!!", "ERROR", JOptionPane.ERROR_MESSAGE);
-                //                        ld.setVisible(false);
-                //                        ld.dispose();
-                //                        return;
-                //                    }
-                //                    if ((Integer.parseInt((String) MainDual.info_map_st1.get("BETS_PARA")) <= Integer.parseInt(srq_handler_para)
-                //                            && Integer.parseInt(srq_handler_para) <= ((Integer.parseInt((String) MainDual.info_map_st1.get("BETS_PARA")) + 3)))
-                //                            || (Integer.parseInt((String) MainDual.info_map_st1.get("BETS_PARA")) >= Integer.parseInt(srq_handler_para)
-                //                                    && Integer.parseInt(srq_handler_para) >= ((Integer.parseInt((String) MainDual.info_map_st1.get("BETS_PARA")) - 3)))) {
-                //                        MainDual.appendToPane(MainDual.main_log_textPane, "handler_para Inconsistency \n", Color.RED);
-                //                        JOptionPane.showMessageDialog(null, "Handler ERROR !!!!", "ERROR", JOptionPane.ERROR_MESSAGE);
-                //                        ld.setVisible(false);
-                //                        ld.dispose();
-                //                        return;
-                //                    }
-                //
-                //                } else {
-                //                    if ((Integer.parseInt((String) MainDual.info_map_st2.get("BETS_TEST_TEMP")) <= Integer.parseInt(srq_handler_temp)
-                //                            && Integer.parseInt(srq_handler_temp) <= ((Integer.parseInt((String) MainDual.info_map_st1.get("BETS_TEST_TEMP")) + 3)))
-                //                            || (Integer.parseInt((String) MainDual.info_map_st2.get("BETS_TEST_TEMP")) >= Integer.parseInt(srq_handler_temp)
-                //                                    && Integer.parseInt(srq_handler_temp) >= ((Integer.parseInt((String) MainDual.info_map_st2.get("BETS_TEST_TEMP")) - 3)))) {
-                //                        MainDual.appendToPane(MainDual.main_log_textPane, "handler_temp Inconsistency \n", Color.RED);
-                //                        JOptionPane.showMessageDialog(null, "Handler ERROR !!!!", "ERROR", JOptionPane.ERROR_MESSAGE);
-                //                        ld.setVisible(false);
-                //                        ld.dispose();
-                //                        return;
-                //                    }
-                //                    if ((Integer.parseInt((String) MainDual.info_map_st2.get("BETS_DUT_MAP")) <= Integer.parseInt(srq_handler_map)
-                //                            && Integer.parseInt(srq_handler_map) <= ((Integer.parseInt((String) MainDual.info_map_st2.get("BETS_DUT_MAP")) + 3)))
-                //                            || (Integer.parseInt((String) MainDual.info_map_st2.get("BETS_DUT_MAP")) >= Integer.parseInt(srq_handler_map)
-                //                                    && Integer.parseInt(srq_handler_map) >= ((Integer.parseInt((String) MainDual.info_map_st2.get("BETS_DUT_MAP")) - 3)))) {
-                //                        MainDual.appendToPane(MainDual.main_log_textPane, "handler_map Inconsistency \n", Color.RED);
-                //                        JOptionPane.showMessageDialog(null, "Handler ERROR !!!!", "ERROR", JOptionPane.ERROR_MESSAGE);
-                //                        ld.setVisible(false);
-                //                        ld.dispose();
-                //                        return;
-                //                    }
-                //                    if ((Integer.parseInt((String) MainDual.info_map_st2.get("BETS_PARA")) <= Integer.parseInt(srq_handler_para)
-                //                            && Integer.parseInt(srq_handler_para) <= ((Integer.parseInt((String) MainDual.info_map_st2.get("BETS_PARA")) + 3)))
-                //                            || (Integer.parseInt((String) MainDual.info_map_st2.get("BETS_PARA")) >= Integer.parseInt(srq_handler_para)
-                //                                    && Integer.parseInt(srq_handler_para) >= ((Integer.parseInt((String) MainDual.info_map_st2.get("BETS_PARA")) - 3)))) {
-                //                        MainDual.appendToPane(MainDual.main_log_textPane, "handler_para Inconsistency \n", Color.RED);
-                //                        JOptionPane.showMessageDialog(null, "Handler ERROR !!!!", "ERROR", JOptionPane.ERROR_MESSAGE);
-                //                        ld.setVisible(false);
-                //                        ld.dispose();
-                //                        return;
-                //                    }
-                //                }
+                if (MainDual.main_radio_st1.isSelected()) {
+                    
+                    System.out.println("temperature_h1.dat ===> " + Integer.parseInt(cu.HederData(PathProperties.ftplocal, "temperature_h1.dat").trim()));
+                    
+                    int temp_difference_h1 = (Integer.parseInt(gpib_handler_temp) - ((Integer.parseInt(cu.HederData(PathProperties.ftplocal, "temperature_h1.dat").trim()))));
+                    System.out.println("temp_difference_h1 ==> " + temp_difference_h1);
+                    
+//                    if (((Integer.parseInt((String) MainDual.info_map_st1.get("TEMPERATURE_LIMIT"))) < Math.abs(temp_difference))) {
+//                        MainDual.appendToPane(MainDual.main_log_textPane, "handler_temp Inconsistency \n", Color.RED);
+//                        JOptionPane.showMessageDialog(null, "Handler TEMP ERROR !!!!", "ERROR", JOptionPane.ERROR_MESSAGE);
+//                        ld.setVisible(false);
+//                        ld.dispose();
+//                        return;
+//                    }
+//                    
+//                    if (!gpib_handler_map.equals((String) MainDual.info_map_st1.get("DUT_MAP"))) {
+//                        MainDual.appendToPane(MainDual.main_log_textPane, "handler_map Inconsistency \n", Color.RED);
+//                        JOptionPane.showMessageDialog(null, "Handler DUT_MAP ERROR !!!!", "ERROR", JOptionPane.ERROR_MESSAGE);
+//                        ld.setVisible(false);
+//                        ld.dispose();
+//                        return;
+//                    }
 
-                if (MainDual.srqkind.equals("on")) {
+                } else {
+                    int temp_difference_h2 = (Integer.parseInt(gpib_handler_temp) - ((Integer.parseInt(cu.HederData(PathProperties.ftplocal, "temperature_h2.dat").trim()))));
+                    System.out.println("temp_difference_h2 ==> " + temp_difference_h2);
+//                    if (((Integer.parseInt((String) MainDual.info_map_st2.get("TEMPERATURE_LIMIT"))) < Math.abs(temp_difference))) {
+//                        MainDual.appendToPane(MainDual.main_log_textPane, "handler_temp Inconsistency \n", Color.RED);
+//                        JOptionPane.showMessageDialog(null, "Handler TEMP ERROR !!!!", "ERROR", JOptionPane.ERROR_MESSAGE);
+//                        ld.setVisible(false);
+//                        ld.dispose();
+//                        return;
+//                    }
+//
+//                    if (!gpib_handler_map.equals((String) MainDual.info_map_st2.get("DUT_MAP"))) {
+//                        MainDual.appendToPane(MainDual.main_log_textPane, "handler_map Inconsistency \n", Color.RED);
+//                        JOptionPane.showMessageDialog(null, "Handler DUT_MAP ERROR !!!!", "ERROR", JOptionPane.ERROR_MESSAGE);
+//                        ld.setVisible(false);
+//                        ld.dispose();
+//                        return;
+//                    }
+                }
+
+                if (MainDual.srqkind.equals("ON")) {
+                    
+                    System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+                    
                     MainDual.while_break = false;
                     while (true) {
                         if (MainDual.while_break) {
@@ -314,7 +297,18 @@ public class PrePgmRestoreProgress {
 
                     ld.setVisible(false);
                     ld.dispose();
-
+                    
+                    
+                    Date bin_in_time_dt = new Date();
+                    
+                    if (MainDual.main_radio_st1.isSelected()) {
+                        cu.FileNew(PathProperties.local_Header, "bin_in_time_h1.dat", sdf.format(bin_in_time_dt), false);
+                    } else {
+                        cu.FileNew(PathProperties.local_Header, "bin_in_time_h2.dat", sdf.format(bin_in_time_dt), false);
+                    }
+                    
+                    System.out.println("@@@@@@@@@@@@@@@BinSummaryPop 호출 전@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+                    
                     BinSummaryPop BinSummaryPop = new BinSummaryPop(MainDual.main_frm_d);
                     BinSummaryPop.setVisible(true);
                 } else {

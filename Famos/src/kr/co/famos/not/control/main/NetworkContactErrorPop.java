@@ -19,28 +19,24 @@ import kr.co.famos.not.control.util.GradientButton;
 import javax.swing.JSeparator;
 
 /**
- * <code>BinCounTerErrorPop.java</code>
+ * <code>NetworkContactErrorPop.java</code>
  * 
  * @company : FAMOS
- * @Description : BIN_COUNTER_ERROR 팝업 화면
+ * @Description : NetworkContactErrorPop 팝업 화면
  * @author : 김이주 차장
  * @modify :
- * @since : 2017.02.17
+ * @since : 2017.03.27
  * @version : 1.0
  */
 
-public class BinCounTerErrorPop extends JDialog {
+public class NetworkContactErrorPop extends JDialog {
 
     private final JPanel test_in_auto__parent_panel = new JPanel();
-
-    // 테스트 카운터 횟수
-    static int re_test_end_count_st1 = 0;
-    static int re_test_end_count_st2 = 0;
 
     /**
      * Create the dialog.
      */
-    public BinCounTerErrorPop(final Frame parent) {
+    public NetworkContactErrorPop(final Frame parent) {
 
         super(parent, true);
         setTitle("ERROR");
@@ -48,10 +44,10 @@ public class BinCounTerErrorPop extends JDialog {
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         /* 프레임 화면 가운데 */
-        Dimension frameSize = test_in_auto__parent_panel.getSize();
+        Dimension frameSize = MainDual.main_frm_d.getSize();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-        setBounds((screenSize.width - frameSize.width) / 3, (screenSize.height - frameSize.height) / 3, 268, 195);
+        setBounds((screenSize.width - (frameSize.width / 2)) / 2, (screenSize.height - (frameSize.height / 2)) / 2, 404, 198);
         getContentPane().setLayout(new BorderLayout());
         test_in_auto__parent_panel.setBackground(Color.WHITE);
         test_in_auto__parent_panel.setForeground(Color.RED);
@@ -63,48 +59,49 @@ public class BinCounTerErrorPop extends JDialog {
             JPanel re_test_end_panel = new JPanel();
             re_test_end_panel.setLayout(null);
             re_test_end_panel.setBackground(new Color(20, 86, 148));
-            re_test_end_panel.setBounds(7, 12, 238, 89);
+            re_test_end_panel.setBounds(7, 12, 365, 89);
             test_in_auto__parent_panel.add(re_test_end_panel);
             {
                 JLabel bin_counter_errorpop_title_lb = new JLabel("HEAD A");
                 bin_counter_errorpop_title_lb.setFont(new Font("Tahoma", Font.BOLD, 17));
-                bin_counter_errorpop_title_lb.setBounds(83, 59, 71, 18);
+                bin_counter_errorpop_title_lb.setBounds(147, 52, 71, 18);
                 re_test_end_panel.add(bin_counter_errorpop_title_lb);
             }
             {
-                JLabel bin_counter_errorpop_lb = new JLabel("BIN COUNTER ERROR!!!");
+                JLabel bin_counter_errorpop_lb = new JLabel("Network Contact Information Error");
                 bin_counter_errorpop_lb.setForeground(Color.RED);
                 bin_counter_errorpop_lb.setFont(new Font("Tahoma", Font.BOLD, 17));
-                bin_counter_errorpop_lb.setBounds(14, 29, 210, 18);
+                bin_counter_errorpop_lb.setBounds(29, 17, 306, 18);
                 re_test_end_panel.add(bin_counter_errorpop_lb);
             }
         }
         {
             JPanel buttonPane = new JPanel();
             buttonPane.setBackground(Color.WHITE);
-            buttonPane.setBounds(7, 113, 238, 35);
+            buttonPane.setBounds(7, 113, 365, 35);
             test_in_auto__parent_panel.add(buttonPane);
             buttonPane.setLayout(null);
             {
-                JButton bin_counter_errorpop_bt_ok = new GradientButton("RETRY");
-                bin_counter_errorpop_bt_ok.setFont(new Font("Tahoma", Font.BOLD, 12));
-                bin_counter_errorpop_bt_ok.addActionListener(new ActionListener() {
+                JButton network_error_bt_ok = new GradientButton("OK");
+                network_error_bt_ok.setText("OK");
+                network_error_bt_ok.setFont(new Font("Tahoma", Font.BOLD, 12));
+                network_error_bt_ok.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         dispose();
                         return;
                     }
                 });
-                bin_counter_errorpop_bt_ok.setBounds(73, 4, 91, 27);
-                bin_counter_errorpop_bt_ok.setActionCommand("OK");
-                buttonPane.add(bin_counter_errorpop_bt_ok);
-                getRootPane().setDefaultButton(bin_counter_errorpop_bt_ok);
+                network_error_bt_ok.setBounds(137, 4, 91, 27);
+                network_error_bt_ok.setActionCommand("OK");
+                buttonPane.add(network_error_bt_ok);
+                getRootPane().setDefaultButton(network_error_bt_ok);
             }
         }
         
         JSeparator separator = new JSeparator();
         separator.setForeground(Color.LIGHT_GRAY);
         separator.setBackground(Color.WHITE);
-        separator.setBounds(7, 107, 238, 2);
+        separator.setBounds(7, 105, 365, 2);
         test_in_auto__parent_panel.add(separator);
     }
 }

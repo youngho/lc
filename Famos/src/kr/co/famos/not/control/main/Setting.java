@@ -3,38 +3,23 @@ package kr.co.famos.not.control.main;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import org.apache.commons.net.ftp.FTPClient;
-
-import kr.co.famos.not.control.ftp.FtpConnect;
-import kr.co.famos.not.control.ftp.ftpModule;
-import kr.co.famos.not.control.util.PathProperties;
+import kr.co.famos.not.control.util.GradientButton;
+import java.awt.Font;
+import javax.swing.JSeparator;
 
 /**
  * <code>TestInManualPop.java</code>
@@ -64,11 +49,12 @@ public class Setting extends JDialog {
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         /* 프레임 화면 가운데 */
-        Dimension frameSize = parent.getSize();
+        Dimension frameSize = MainDual.main_frm_d.getSize();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-        setBounds((screenSize.width - frameSize.width / 3) / 2, (screenSize.height - frameSize.height / 3) / 2, 265, 170);
+        setBounds((screenSize.width - (frameSize.width / 2)) / 2, (screenSize.height - (frameSize.height / 2)) / 2, 265, 178);
         getContentPane().setLayout(new BorderLayout());
+        test_in_auto__parent_panel.setBackground(Color.WHITE);
         test_in_auto__parent_panel.setForeground(Color.RED);
         test_in_auto__parent_panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
@@ -76,10 +62,12 @@ public class Setting extends JDialog {
         test_in_auto__parent_panel.setLayout(null);
 
         JLabel setting_ip_lb = new JLabel("IP");
+        setting_ip_lb.setFont(new Font("Tahoma", Font.BOLD, 15));
         setting_ip_lb.setBounds(17, 12, 55, 18);
         test_in_auto__parent_panel.add(setting_ip_lb);
 
         setting_ip_text = new JTextField("121.185.32.49");
+        setting_ip_text.setFont(new Font("Tahoma", Font.BOLD, 15));
         setting_ip_text.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent e) {
                 
@@ -90,11 +78,13 @@ public class Setting extends JDialog {
         test_in_auto__parent_panel.add(setting_ip_text);
         {
             JPanel buttonPane = new JPanel();
-            buttonPane.setBounds(17, 81, 216, 35);
+            buttonPane.setBackground(Color.WHITE);
+            buttonPane.setBounds(14, 91, 221, 35);
             test_in_auto__parent_panel.add(buttonPane);
             buttonPane.setLayout(null);
             {
-                JButton setting_bt_ok = new JButton("OK");
+                JButton setting_bt_ok = new GradientButton("OK");
+                setting_bt_ok.setFont(new Font("Tahoma", Font.BOLD, 12));
                 setting_bt_ok.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         MainDual.socket_ip = setting_ip_text.getText();
@@ -102,31 +92,34 @@ public class Setting extends JDialog {
                         dispose();
                     }
                 });
-                setting_bt_ok.setBounds(28, 5, 53, 27);
+                setting_bt_ok.setBounds(30, 5, 53, 27);
                 setting_bt_ok.setActionCommand("OK");
                 buttonPane.add(setting_bt_ok);
                 getRootPane().setDefaultButton(setting_bt_ok);
             }
 
             {
-                JButton setting_bt_exit = new JButton("EXIT");
+                JButton setting_bt_exit = new GradientButton("EXIT");
+                setting_bt_exit.setFont(new Font("Tahoma", Font.BOLD, 12));
                 setting_bt_exit.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         dispose();
                         return;
                     }
                 });
-                setting_bt_exit.setBounds(109, 5, 77, 27);
+                setting_bt_exit.setBounds(113, 5, 77, 27);
                 setting_bt_exit.setActionCommand("Cancel");
                 buttonPane.add(setting_bt_exit);
             }
         }
         
         JLabel setting_port_lb = new JLabel("PORT");
+        setting_port_lb.setFont(new Font("Tahoma", Font.BOLD, 15));
         setting_port_lb.setBounds(17, 45, 55, 18);
         test_in_auto__parent_panel.add(setting_port_lb);
         
         setting_port_text = new JTextField("7074");
+        setting_port_text.setFont(new Font("Tahoma", Font.BOLD, 15));
         setting_port_text.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent arg0) {
             }
@@ -134,5 +127,11 @@ public class Setting extends JDialog {
         setting_port_text.setColumns(10);
         setting_port_text.setBounds(86, 45, 149, 24);
         test_in_auto__parent_panel.add(setting_port_text);
+        
+        JSeparator separator = new JSeparator();
+        separator.setForeground(Color.LIGHT_GRAY);
+        separator.setBackground(Color.WHITE);
+        separator.setBounds(14, 81, 219, 2);
+        test_in_auto__parent_panel.add(separator);
     }
 }

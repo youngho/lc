@@ -1,9 +1,7 @@
 package kr.co.famos.not.control.ftp;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import org.apache.log4j.Logger;
 import java.io.IOException;
-import java.util.Properties;
 
 import javax.swing.JOptionPane;
 
@@ -11,7 +9,9 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 
 import kr.co.famos.not.control.main.Loading;
-
+import kr.co.famos.not.control.main.MainDual;
+import kr.co.famos.not.control.main.NetworkContactErrorPop;
+import kr.co.famos.not.control.util.WriteLogger;
 /**
  * <code>FtpConnect.java</code>
  * 
@@ -24,7 +24,10 @@ import kr.co.famos.not.control.main.Loading;
  */
 
 public class FtpConnect {
-
+    
+    // 로그 설정
+    private static Logger logger = WriteLogger.getInstance("FtpConnect.java");
+    
     // 서버 연결 확인 유무
     public static boolean ConnectSuccess(FTPClient ftpClient, String sServer, int iPort) {
         int reply = 0;
@@ -33,7 +36,7 @@ public class FtpConnect {
             // 연결 시도후, 성공했는지 응답 코드 확인
             reply = ftpClient.getReplyCode();
         } catch (Exception e) {
-            // TODO: handle exception
+            logger.error("FTP connection error !!!!");
         }
         return (FTPReply.isPositiveCompletion(reply));
     }
@@ -61,7 +64,7 @@ public class FtpConnect {
                 try {
                     ftpClient.disconnect();
                 } catch (IOException f) {
-                    System.out.println(sServer + f.getMessage());
+                    logger.error("FTPClient Connect ==> " + f.getMessage());
                 }
             }
             System.out.println(sServer + ioe.getMessage());
@@ -71,15 +74,14 @@ public class FtpConnect {
 
     // 계정과 패스워드로 로그인
     public static boolean Login(FTPClient ftpClient, String sServer, String sId, String sPwd, Loading ld) {
-
         try {
-            // logger.info(sServer+" = FTP 서버 로그인");
             ftpClient.connect(sServer);
             return ftpClient.login(sId, sPwd);
         } catch (IOException ioe) {
-            JOptionPane.showMessageDialog(null, "FTP connet login error !!!!", "ERROR", JOptionPane.ERROR_MESSAGE);
-            ld.setVisible(false);
-            ld.dispose();
+            NetworkContactErrorPop networkContactErrorPop = new NetworkContactErrorPop(MainDual.main_frm_d);
+            networkContactErrorPop.setVisible(true);
+            MainDual.loading_flg = true;
+            logger.error("Login Contact Error ==> " + ioe.getMessage());
         }
         return false;
     }
@@ -92,7 +94,7 @@ public class FtpConnect {
             ftpClient.connect(sServer);
             return ftpClient.logout();
         } catch (IOException ioe) {
-            System.out.println(sServer + ioe.getMessage());
+            logger.error("Logout ==> " + ioe.getMessage());
         }
         return false;
     }
@@ -103,8 +105,6 @@ public class FtpConnect {
         try {
             ftpClient.disconnect();
             // logger.info(sServer+" = FTP 서버 연결 종료");
-            // logger.info("****************************************************************
-            // \n\n");
         } catch (IOException ioe) {
             System.out.println(sServer + ioe.getMessage());
             System.out.println("----------------------------------------------------------------------------------\n\n");

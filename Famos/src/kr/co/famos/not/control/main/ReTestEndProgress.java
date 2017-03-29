@@ -36,31 +36,50 @@ public class ReTestEndProgress {
         Loading ld;
 
         ReTestEndTask() {
-            
-            CommonUtil cu = new CommonUtil();
 
-            if (MainDual.main_radio_st1.isSelected()) {
-                // TEST È½¼ö (0 or 1 or 2.....)
-                cu.FileNew(PathProperties.local_Header, "test_counter_h1.dat", cu.HederData(PathProperties.local_Header, "test_counter_h1.dat"), false);
-                cu.FileNew(PathProperties.local_Header, "lc_seq_h1.dat", "RE_TEST", false);
-            } else {
-                // TEST È½¼ö (0 or 1 or 2.....)
-                cu.FileNew(PathProperties.local_Header, "test_counter_h2.dat", cu.HederData(PathProperties.local_Header, "test_counter_h2.dat"), false);
-                cu.FileNew(PathProperties.local_Header, "lc_seq_h2.dat", "RE_TEST", false);
-            }
-            
             try {
-
+                
+                MainDual.loading_flg = false;
+                
                 ld = new Loading(MainDual.main_frm_d);
                 ld.setVisible(true);
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+                Date re_start_time_dt = new Date();
+
+                CommonUtil cu = new CommonUtil();
+
+                if (MainDual.main_radio_st1.isSelected()) {
+                    cu.FileNew(PathProperties.local_Header, "lc_seq_h1.dat", "RE_TEST", false);
+                    CommonUtil.ButtonConditionA();
+                } else {
+                    cu.FileNew(PathProperties.local_Header, "lc_seq_h2.dat", "RE_TEST", false);
+                    CommonUtil.ButtonConditionB();
+                }
+
+                if (MainDual.main_radio_st1.isSelected()) {
+                    cu.FileNew(PathProperties.local_Header, "test_flow_h1.dat", "RETEST", false);
+                    // SRQKIND#08 or SRQKIND#10 ¹ÞÀº ½ÃÁ¡.
+                    cu.FileNew(PathProperties.local_Header, "lot_start_time_h1.dat", sdf.format(re_start_time_dt), false);
+                    String test_counter = cu.FileReaderData(PathProperties.local_Header, "test_counter_h1.dat", true);
+                    int count = Integer.parseInt(test_counter.trim()) + 1;
+                    cu.FileNew(PathProperties.local_Header, "test_counter_h1.dat", String.valueOf(count), false);
+
+                } else {
+                    cu.FileNew(PathProperties.local_Header, "test_flow_h2.dat", "RETEST", false);
+                    cu.FileNew(PathProperties.local_Header, "lot_start_time_h2.dat", sdf.format(re_start_time_dt), false);
+                    String test_counter = cu.FileReaderData(PathProperties.local_Header, "test_counter_h2.dat", true);
+                    int count = Integer.parseInt(test_counter.trim()) + 1;
+                    cu.FileNew(PathProperties.local_Header, "test_counter_h2.dat", String.valueOf(count), false);
+
+                }
                 
-                MainDual.while_break = false;
                 while (true) {
-                    if (MainDual.while_break) {
+                    if (MainDual.thread_stop) {
                         break;
                     }
                 }
-                
+
                 ld.setVisible(false);
                 ld.dispose();
 

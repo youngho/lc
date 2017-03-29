@@ -13,11 +13,10 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import kr.co.famos.not.control.ftp.ftpModule;
+import kr.co.famos.not.control.main.BinSummaryPop;
 import kr.co.famos.not.control.main.MainDual;
 
 /**
@@ -32,22 +31,12 @@ import kr.co.famos.not.control.main.MainDual;
  */
 
 public class CommonUtil {
-    public static void main(String[] args) {
-        
-        CommonUtil cu = new CommonUtil();
-
-        String sub_bin_data = cu.FileReaderData("E:\\EMCP\\BACKUP\\LOCAL_08\\", "input_lotid123456_subbin_report-20170630135555.HEADA", true);
-        cu.SubBinData(sub_bin_data);
-        
-    } 
-    
-    
     public static void data_reset() {
         CommonUtil cu = new CommonUtil();
-        List li = cu.getDirFileList(PathProperties.local_Header);
-
+        List li     = cu.getDirFileList(PathProperties.local_Header);
+        List casiLi = cu.getDirFileList(PathProperties.ftpcasi);
+        
         if (MainDual.main_radio_st1.isSelected()) {
-
             // 모든 정보 초기화
             MainDual.main_operator_text_st1.setText("");
             MainDual.main_fab_text_st1.setText("");
@@ -63,12 +52,18 @@ public class CommonUtil {
             MainDual.test_in_manual_mode_h1 = "PRODUCT MODE";
 
             for (int i = 0; i < li.size(); i++) {
-                if (li.get(i).toString().endsWith("h1.dat")) {
+                System.out.println("li.get(i).toString() ===> " + li.get(i).toString());
+                if (li.get(i).toString().endsWith("prelot_end_time_h1.dat")) {
+                    System.out.println("li.get(i).toString() ===> " + li.get(i).toString());
+                    continue;
+                } else if (li.get(i).toString().endsWith("h1.dat")) {
+                    cu.fileDelete(li.get(i).toString());
+                } else if (li.get(i).toString().endsWith("head.dat")) {
                     cu.fileDelete(li.get(i).toString());
                 }
             }
-
             ButtonConditionA();
+            
         } else {
 
             MainDual.main_operator_text_st2.setText("");
@@ -85,12 +80,19 @@ public class CommonUtil {
             MainDual.test_in_manual_mode_h2 = "PRODUCT MODE";
 
             for (int i = 0; i < li.size(); i++) {
-                if (li.get(i).toString().endsWith("h2.dat")) {
+                if (li.get(i).toString().startsWith("prelot_end_time_h2.dat")) {
+                    continue;
+                } else if (li.get(i).toString().endsWith("h2.dat")) {
+                    cu.fileDelete(li.get(i).toString());
+                } else if (li.get(i).toString().endsWith("head.dat")) {
                     cu.fileDelete(li.get(i).toString());
                 }
             }
-
             ButtonConditionB();
+        }
+        
+        for (int i = 0; i < casiLi.size(); i++) {
+            cu.fileDelete(casiLi.get(i).toString());
         }
 
         // 시작 시간 
@@ -105,77 +107,121 @@ public class CommonUtil {
     public void Headerdata() {
         CommonUtil cu = new CommonUtil();
         if (MainDual.main_radio_st1.isSelected()) {
-            MainDual.header_data += "TESTER=HTMAT1"+"\n";
-            MainDual.header_data += "SYSTEM=T5503"+"\n";
-            MainDual.header_data += "HANDLER=TW350HT"+"\n";
-            MainDual.header_data += "LOT_ID=" + MainDual.main_lotno_text_st1.getText()+"\n";
-            MainDual.header_data += "PROCESS_CODE= " + (String) MainDual.info_map_st1.get("PROCESS")+"\n";
-            MainDual.header_data += "PART_NUMBER=" + (String) MainDual.info_map_st1.get("PARTNUMBER")+"\n";
-            MainDual.header_data += "PROGRAM_NAME=" + (String) MainDual.info_map_st1.get("MAIN_PGM")+"\n";
-            MainDual.header_data += "GRADE=" + (String) MainDual.info_map_st1.get("GRADE")+"\n";
-            MainDual.header_data += "FAB=M1" + (String) MainDual.info_map_st1.get("FAB")+"\n";
-            MainDual.header_data += "FW_PATH=0"+"\n";
-            MainDual.header_data += "FW_NAME=0"+"\n";
-            MainDual.header_data += "TEMP=" + (String) MainDual.info_map_st1.get("TEMP")+"\n";
-            MainDual.header_data += "OPERATOR_ID=" + cu.HederData(PathProperties.local_Header, "input_operator_id_h1.dat");
-            MainDual.header_data += "QUANTITY=" + (String) MainDual.info_map_st1.get("QTY")+"\n";
-            MainDual.header_data += "FUNCTION_KEY=YYNNNNNNNNNNNNNN"+"\n";
-            MainDual.header_data += "TEST_COUNTER=" + cu.HederData(PathProperties.local_Header, "test_counter_h1.dat");
-            MainDual.header_data += "TEST_INPUT=" + cu.HederData(PathProperties.local_Header, "test_input_h1.dat");
-            MainDual.header_data += "TEST_FLOW=" + cu.HederData(PathProperties.local_Header, "test_flow_h1.dat");
-            MainDual.header_data += "BOARD_ID=0"+"\n";
-            MainDual.header_data += "PRELOT_END TIME=00000000000000"+"\n";
-            MainDual.header_data += "LOT_IN_TIME=" + cu.HederData(PathProperties.local_Header, "lot_in_time_h1.dat");
-            MainDual.header_data += "MES_IN_TIME=0"+"\n";
-            MainDual.header_data += "MES_END_TIME=0"+"\n";
-            MainDual.header_data += "BETS_IN_TIME=" + cu.HederData(PathProperties.local_Header, "bets_in_time_h1.dat");
-            MainDual.header_data += "BETS_END_TIME=" + cu.HederData(PathProperties.local_Header, "bets_end_time_h1.dat");
-            MainDual.header_data += "LOT_IN_END_TIME=" + cu.HederData(PathProperties.local_Header, "lot_in_end_time_h1.dat");
-            MainDual.header_data += "PGM_UPLOAD_TIME=" + cu.HederData(PathProperties.local_Header, "pgm_upload_time_h1.dat");
-            MainDual.header_data += "END_TIME=" + cu.HederData(PathProperties.local_Header, "end_time_h1.dat");
-            MainDual.header_data += "BIN_IN_TIME=" + cu.HederData(PathProperties.local_Header, "bin_in_time_h1.dat");
-            MainDual.header_data += "BIN_END_TIME=" + cu.HederData(PathProperties.local_Header, "bin_in_time_h1.dat");
-            MainDual.header_data += "SBL_IN_TIME=" + cu.HederData(PathProperties.local_Header, "sbl_in_time_h1.dat");
-            MainDual.header_data += "SBL_END_TIME=" + cu.HederData(PathProperties.local_Header, "sbl_end_time_h1.dat");
-            MainDual.header_data += "SIMAX END_IN_TIME=0"+"\n";
-            MainDual.header_data += "SIMAX_END_END_TIME=0"+"\n";
-            MainDual.header_data += "FINAL_END_TIME=" + cu.HederData(PathProperties.local_Header, "final_end_time_h1.dat");
+            MainDual.header_data += "TESTER_NUMBER="+ cu.HederData(PathProperties.local_Header, "tester_number.dat");
+            MainDual.header_data += "TESTER_MODEL="+ cu.HederData(PathProperties.local_Header, "TESTID.dat");
+            MainDual.header_data += "HANDLER_MODEL="+ cu.HederData(PathProperties.local_Header, "handler_model.dat");
+            MainDual.header_data += "HEAD="+ cu.HederData(PathProperties.local_Header, "head.dat");
+            MainDual.header_data += "PARA="+ cu.HederData(PathProperties.local_Header, "para_h1.dat");
+            MainDual.header_data += "LOT_ID="+ cu.HederData(PathProperties.local_Header, "lot_id_h1.dat");
+            MainDual.header_data += "PROCESS_CODE="+ cu.HederData(PathProperties.local_Header, "process_code_h1.dat");
+            MainDual.header_data += "PART_NUMBER="+ cu.HederData(PathProperties.local_Header, "part_number_h1.dat");
+            MainDual.header_data += "MAIN_PROGRAM_NAME="+ cu.HederData(PathProperties.local_Header, "main_program_name_h1.dat");
+            MainDual.header_data += "GRADE="+ cu.HederData(PathProperties.local_Header, "grade_h1.dat");
+            MainDual.header_data += "FAB="+ cu.HederData(PathProperties.local_Header, "fab_h1.dat");
+            MainDual.header_data += "FIRMWARE_NAME="+ cu.HederData(PathProperties.local_Header, "firmware_name_h1.dat");
+            MainDual.header_data += "FIRMWARE_VERSION="+ cu.HederData(PathProperties.local_Header, "firmware_version_h1.dat");
+            MainDual.header_data += "TEMPERATURE="+ cu.HederData(PathProperties.local_Header, "temperature_h1.dat");
+            MainDual.header_data += "OPERATOR_ID="+ cu.HederData(PathProperties.local_Header, "operator_id_h1.dat");
+            MainDual.header_data += "QUANTITY="+ cu.HederData(PathProperties.local_Header, "quantity_h1.dat");
+            MainDual.header_data += "FUNCTION_KEY="+ cu.HederData(PathProperties.local_Header, "function_key_h1.dat");
+            MainDual.header_data += "PASS_BIN_SELECTION="+ cu.HederData(PathProperties.local_Header, "pass_bin_selection_h1.dat");
+            MainDual.header_data += "TEST_COUNTER="+ cu.HederData(PathProperties.local_Header, "test_counter_h1.dat");
+            MainDual.header_data += "TEST_INPUT="+ cu.HederData(PathProperties.local_Header, "test_input_h1.dat");
+            MainDual.header_data += "TEST_FLOW="+ cu.HederData(PathProperties.local_Header, "test_flow_h1.dat");
+            MainDual.header_data += "REWORK_FLAG="+ cu.HederData(PathProperties.local_Header, "rework_flag_h1.dat");
+            MainDual.header_data += "TEST_MODE="+ cu.HederData(PathProperties.local_Header, "test_mode_h1.dat");
+            MainDual.header_data += "BOARD_ID="+ cu.HederData(PathProperties.local_Header, "board_id_h1.dat");
+            MainDual.header_data += "PRELOT_END_TIME="+ cu.HederData(PathProperties.local_Header, "prelot_end_time_h1.dat");
+            MainDual.header_data += "LOT_IN_TIME="+ cu.HederData(PathProperties.local_Header, "lot_in_time_h1.dat");
+            MainDual.header_data += "BETS_IN_TIME="+ cu.HederData(PathProperties.local_Header, "bets_in_time_h1.dat");
+            MainDual.header_data += "BETS_END_TIME="+ cu.HederData(PathProperties.local_Header, "bets_end_time_h1.dat");
+            MainDual.header_data += "LOT_IN_END_TIME="+ cu.HederData(PathProperties.local_Header, "lot_in_end_time_h1.dat");
+            MainDual.header_data += "LOT_START_TIME="+ cu.HederData(PathProperties.local_Header, "lot_start_time_h1.dat");
+            MainDual.header_data += "END_TIME="+ cu.HederData(PathProperties.local_Header, "end_time_h1.dat");
+            MainDual.header_data += "BIN_IN_TIME="+ cu.HederData(PathProperties.local_Header, "bin_in_time_h1.dat");
+            MainDual.header_data += "BIN_END_TIME="+ cu.HederData(PathProperties.local_Header, "bin_end_time_h1.dat");
+            MainDual.header_data += "SBL_IN_TIME="+ cu.HederData(PathProperties.local_Header, "sbl_in_time_h1.dat");
+            MainDual.header_data += "SBL_END_TIME="+ cu.HederData(PathProperties.local_Header, "sbl_end_time_h1.dat");
+            MainDual.header_data += "FINAL_END_TIME="+ cu.HederData(PathProperties.local_Header, "final_end_time_h1.dat");
+            MainDual.header_data += "SBL_YIELD_LIMIT="+ cu.HederData(PathProperties.local_Header, "sbl_yield_limit_h1.dat");
+            MainDual.header_data += "SBL_SUB_BINA_COUNTER="+ cu.HederData(PathProperties.local_Header, "sbl_sub_bina_counter_h1.dat");
+            MainDual.header_data += "SBL_SUB_BINA_LIMIT="+ cu.HederData(PathProperties.local_Header, "sbl_sub_bina_limit_h1.dat");
+            MainDual.header_data += "SBL_SUB_BINB_COUNTER="+ cu.HederData(PathProperties.local_Header, "sbl_sub_binb_counter_h1.dat");
+            MainDual.header_data += "SBL_SUB_BINB_LIMIT="+ cu.HederData(PathProperties.local_Header, "sbl_sub_binb_limit_h1.dat");
+            MainDual.header_data += "SBL_BIN9_COUNTER="+ cu.HederData(PathProperties.local_Header, "sbl_bin9_counter_h1.dat");
+            MainDual.header_data += "SBL_BIN9_LIMIT="+ cu.HederData(PathProperties.local_Header, "sbl_bin9_limit_h1.dat");
+            MainDual.header_data += "SBL_BIN8_LIMIT="+ cu.HederData(PathProperties.local_Header, "sbl_bin8_limit_h1.dat");
+            MainDual.header_data += "SBL_YIELD_RESULT="+ cu.HederData(PathProperties.local_Header, "sbl_yield_result_h1.dat");
+            MainDual.header_data += "SBL_BIN1_RESULT="+ cu.HederData(PathProperties.local_Header, "sbl_bin1_result_h1.dat");
+            MainDual.header_data += "SBL_BIN2_RESULT="+ cu.HederData(PathProperties.local_Header, "sbl_bin2_result_h1.dat");
+            MainDual.header_data += "SBL_BIN3_RESULT="+ cu.HederData(PathProperties.local_Header, "sbl_bin3_result_h1.dat");
+            MainDual.header_data += "SBL_BIN4_RESULT="+ cu.HederData(PathProperties.local_Header, "sbl_bin4_result_h1.dat");
+            MainDual.header_data += "SBL_BIN5_RESULT="+ cu.HederData(PathProperties.local_Header, "sbl_bin5_result_h1.dat");
+            MainDual.header_data += "SBL_BIN6_RESULT="+ cu.HederData(PathProperties.local_Header, "sbl_bin6_result_h1.dat");
+            MainDual.header_data += "SBL_BIN7_RESULT="+ cu.HederData(PathProperties.local_Header, "sbl_bin7_result_h1.dat");
+            MainDual.header_data += "SBL_BIN8_RESULT="+ cu.HederData(PathProperties.local_Header, "sbl_bin8_result_h1.dat");
+            MainDual.header_data += "SBL_BIN9_RESULT="+ cu.HederData(PathProperties.local_Header, "sbl_bin9_result_h1.dat");
+            MainDual.header_data += "SBL_SUB_BINA_RESULT="+ cu.HederData(PathProperties.local_Header, "sbl_sub_bina_result_h1.dat");
+            MainDual.header_data += "SBL_SUB_BINB_RESULT="+ cu.HederData(PathProperties.local_Header, "sbl_sub_binb_result_h1.dat");
+            MainDual.header_data += "SBL_RESULT="+ cu.HederData(PathProperties.local_Header, "sbl_result_h1.dat");
         } else {                                                    
-            MainDual.header_data += "TESTER=HTMAT2"+"\n";
-            MainDual.header_data += "SYSTEM=T5503"+"\n";
-            MainDual.header_data += "HANDLER=TW350HT"+"\n";
-            MainDual.header_data += "LOT_ID=" + MainDual.main_lotno_text_st2.getText()+"\n";
-            MainDual.header_data += "PROCESS_CODE= " + (String) MainDual.info_map_st2.get("PROCESS")+"\n";
-            MainDual.header_data += "PART_NUMBER=" + (String) MainDual.info_map_st2.get("PARTNUMBER")+"\n";
-            MainDual.header_data += "PROGRAM_NAME=" + (String) MainDual.info_map_st2.get("MAIN_PGM")+"\n";
-            MainDual.header_data += "GRADE=" + (String) MainDual.info_map_st2.get("GRADE")+"\n";
-            MainDual.header_data += "FAB=M1" + (String) MainDual.info_map_st2.get("FAB")+"\n";
-            MainDual.header_data += "FW_PATH=0"+"\n";
-            MainDual.header_data += "FW_NAME=0"+"\n";
-            MainDual.header_data += "TEMP=" + (String) MainDual.info_map_st2.get("TEMP")+"\n";
-            MainDual.header_data += "OPERATOR_ID=" + cu.HederData(PathProperties.local_Header, "input_operator_id_h2.dat");
-            MainDual.header_data += "QUANTITY=" + (String) MainDual.info_map_st2.get("QTY")+"\n";
-            MainDual.header_data += "FUNCTION_KEY=YYNNNNNNNNNNNNNN"+"\n";
-            MainDual.header_data += "TEST_COUNTER=" + cu.HederData(PathProperties.local_Header, "test_counter_h2.dat");
-            MainDual.header_data += "TEST_INPUT=" + cu.HederData(PathProperties.local_Header, "test_input_h2.dat");
-            MainDual.header_data += "TEST_FLOW=" + cu.HederData(PathProperties.local_Header, "test_flow_h2.dat");
-            MainDual.header_data += "BOARD_ID=0"+"\n";
-            MainDual.header_data += "PRELOT_END TIME=00000000000000"+"\n";
-            MainDual.header_data += "LOT_IN_TIME=" + cu.HederData(PathProperties.local_Header, "lot_in_time_h2.dat");
-            MainDual.header_data += "MES_IN_TIME=0"+"\n";
-            MainDual.header_data += "MES_END_TIME=0"+"\n";
-            MainDual.header_data += "BETS_IN_TIME=" + cu.HederData(PathProperties.local_Header, "bets_in_time_h2.dat");
-            MainDual.header_data += "BETS_END_TIME=" + cu.HederData(PathProperties.local_Header, "bets_end_time_h2.dat");
-            MainDual.header_data += "LOT_IN_END_TIME=" + cu.HederData(PathProperties.local_Header, "lot_in_end_time_h2.dat");
-            MainDual.header_data += "PGM_UPLOAD_TIME=" + cu.HederData(PathProperties.local_Header, "pgm_upload_time_h2.dat");
-            MainDual.header_data += "END_TIME=" + cu.HederData(PathProperties.local_Header, "end_time_h2.dat");
-            MainDual.header_data += "BIN_IN_TIME=" + cu.HederData(PathProperties.local_Header, "bin_in_time_h2.dat");
-            MainDual.header_data += "BIN_END_TIME=" + cu.HederData(PathProperties.local_Header, "bin_in_time_h2.dat");
-            MainDual.header_data += "SBL_IN_TIME=" + cu.HederData(PathProperties.local_Header, "sbl_in_time_h2.dat");
-            MainDual.header_data += "SBL_END_TIME=" + cu.HederData(PathProperties.local_Header, "sbl_end_time_h2.dat");
-            MainDual.header_data += "SIMAX END_IN_TIME=0"+"\n";
-            MainDual.header_data += "SIMAX_END_END_TIME=0"+"\n";
-            MainDual.header_data += "FINAL_END_TIME=" + cu.HederData(PathProperties.local_Header, "final_end_time_h2.dat");
+            MainDual.header_data += "TESTER_NUMBER="+ cu.HederData(PathProperties.local_Header, "tester_number.dat");
+            MainDual.header_data += "TESTER_MODEL="+ cu.HederData(PathProperties.local_Header, "TESTID.dat");
+            MainDual.header_data += "HANDLER_MODEL="+ cu.HederData(PathProperties.local_Header, "handler_model.dat");
+            MainDual.header_data += "HEAD="+ cu.HederData(PathProperties.local_Header, "head.dat");
+            MainDual.header_data += "PARA="+ cu.HederData(PathProperties.local_Header, "para_h2.dat");
+            MainDual.header_data += "LOT_ID="+ cu.HederData(PathProperties.local_Header, "lot_id_h2.dat");
+            MainDual.header_data += "PROCESS_CODE="+ cu.HederData(PathProperties.local_Header, "process_code_h2.dat");
+            MainDual.header_data += "PART_NUMBER="+ cu.HederData(PathProperties.local_Header, "part_number_h2.dat");
+            MainDual.header_data += "MAIN_PROGRAM_NAME="+ cu.HederData(PathProperties.local_Header, "main_program_name_h2.dat");
+            MainDual.header_data += "GRADE="+ cu.HederData(PathProperties.local_Header, "grade_h2.dat");
+            MainDual.header_data += "FAB="+ cu.HederData(PathProperties.local_Header, "fab_h2.dat");
+            MainDual.header_data += "FIRMWARE_NAME="+ cu.HederData(PathProperties.local_Header, "firmware_name_h2.dat");
+            MainDual.header_data += "FIRMWARE_VERSION"+ cu.HederData(PathProperties.local_Header, "firmware_version_h2.dat");
+            MainDual.header_data += "TEMPERATURE="+ cu.HederData(PathProperties.local_Header, "temperature_h2.dat");
+            MainDual.header_data += "OPERATOR_ID="+ cu.HederData(PathProperties.local_Header, "operator_id_h2.dat");
+            MainDual.header_data += "QUANTITY="+ cu.HederData(PathProperties.local_Header, "quantity_h2.dat");
+            MainDual.header_data += "FUNCTION_KEY="+ cu.HederData(PathProperties.local_Header, "function_key_h2.dat");
+            MainDual.header_data += "PASS_BIN_SELECTION="+ cu.HederData(PathProperties.local_Header, "pass_bin_selection_h2.dat");
+            MainDual.header_data += "TEST_COUNTER="+ cu.HederData(PathProperties.local_Header, "test_counter_h2.dat");
+            MainDual.header_data += "TEST_INPUT="+ cu.HederData(PathProperties.local_Header, "test_input_h2.dat");
+            MainDual.header_data += "TEST_FLOW="+ cu.HederData(PathProperties.local_Header, "test_flow_h2.dat");
+            MainDual.header_data += "REWORK_FLAG="+ cu.HederData(PathProperties.local_Header, "rework_flag_h2.dat");
+            MainDual.header_data += "TEST_MODE="+ cu.HederData(PathProperties.local_Header, "test_mode_h2.dat");
+            MainDual.header_data += "BOARD_ID="+ cu.HederData(PathProperties.local_Header, "board_id_h2.dat");
+            MainDual.header_data += "PRELOT_END_TIME="+ cu.HederData(PathProperties.local_Header, "prelot_end_time_h2.dat");
+            MainDual.header_data += "LOT_IN_TIME="+ cu.HederData(PathProperties.local_Header, "lot_in_time_h2.dat");
+            MainDual.header_data += "BETS_IN_TIME="+ cu.HederData(PathProperties.local_Header, "bets_in_time_h2.dat");
+            MainDual.header_data += "BETS_END_TIME="+ cu.HederData(PathProperties.local_Header, "bets_end_time_h2.dat");
+            MainDual.header_data += "LOT_IN_END_TIME="+ cu.HederData(PathProperties.local_Header, "lot_in_end_time_h2.dat");
+            MainDual.header_data += "LOT_START_TIME="+ cu.HederData(PathProperties.local_Header, "lot_start_time_h2.dat");
+            MainDual.header_data += "END_TIME="+ cu.HederData(PathProperties.local_Header, "end_time_h2.dat");
+            MainDual.header_data += "BIN_IN_TIME="+ cu.HederData(PathProperties.local_Header, "bin_in_time_h2.dat");
+            MainDual.header_data += "BIN_END_TIME="+ cu.HederData(PathProperties.local_Header, "bin_end_time_h2.dat");
+            MainDual.header_data += "SBL_IN_TIME="+ cu.HederData(PathProperties.local_Header, "sbl_in_time_h2.dat");
+            MainDual.header_data += "SBL_END_TIME="+ cu.HederData(PathProperties.local_Header, "sbl_end_time_h2.dat");
+            MainDual.header_data += "FINAL_END_TIME="+ cu.HederData(PathProperties.local_Header, "final_end_time_h2.dat");
+            MainDual.header_data += "SBL_YIELD_LIMIT="+ cu.HederData(PathProperties.local_Header, "sbl_yield_limit_h2.dat");
+            MainDual.header_data += "SBL_SUB_BINA_COUNTER="+ cu.HederData(PathProperties.local_Header, "sbl_sub_bina_counter_h2.dat");
+            MainDual.header_data += "SBL_SUB_BINA_LIMIT="+ cu.HederData(PathProperties.local_Header, "sbl_sub_bina_limit_h2.dat");
+            MainDual.header_data += "SBL_SUB_BINB_COUNTER="+ cu.HederData(PathProperties.local_Header, "sbl_sub_binb_counter_h2.dat");
+            MainDual.header_data += "SBL_SUB_BINB_LIMIT="+ cu.HederData(PathProperties.local_Header, "sbl_sub_binb_limit_h2.dat");
+            MainDual.header_data += "SBL_BIN9_COUNTER="+ cu.HederData(PathProperties.local_Header, "sbl_bin9_counter_h2.dat");
+            MainDual.header_data += "SBL_BIN9_LIMIT="+ cu.HederData(PathProperties.local_Header, "sbl_bin9_limit_h2.dat");
+            MainDual.header_data += "SBL_BIN8_LIMIT="+ cu.HederData(PathProperties.local_Header, "sbl_bin8_limit_h2.dat");
+            MainDual.header_data += "SBL_YIELD_RESULT="+ cu.HederData(PathProperties.local_Header, "sbl_yield_result_h2.dat");
+            MainDual.header_data += "SBL_BIN1_RESULT="+ cu.HederData(PathProperties.local_Header, "sbl_bin1_result_h2.dat");
+            MainDual.header_data += "SBL_BIN2_RESULT="+ cu.HederData(PathProperties.local_Header, "sbl_bin2_result_h2.dat");
+            MainDual.header_data += "SBL_BIN3_RESULT="+ cu.HederData(PathProperties.local_Header, "sbl_bin3_result_h2.dat");
+            MainDual.header_data += "SBL_BIN4_RESULT="+ cu.HederData(PathProperties.local_Header, "sbl_bin4_result_h2.dat");
+            MainDual.header_data += "SBL_BIN5_RESULT="+ cu.HederData(PathProperties.local_Header, "sbl_bin5_result_h2.dat");
+            MainDual.header_data += "SBL_BIN6_RESULT="+ cu.HederData(PathProperties.local_Header, "sbl_bin6_result_h2.dat");
+            MainDual.header_data += "SBL_BIN7_RESULT="+ cu.HederData(PathProperties.local_Header, "sbl_bin7_result_h2.dat");
+            MainDual.header_data += "SBL_BIN8_RESULT="+ cu.HederData(PathProperties.local_Header, "sbl_bin8_result_h2.dat");
+            MainDual.header_data += "SBL_BIN9_RESULT="+ cu.HederData(PathProperties.local_Header, "sbl_bin9_result_h2.dat");
+            MainDual.header_data += "SBL_SUB_BINA_RESULT="+ cu.HederData(PathProperties.local_Header, "sbl_sub_bina_result_h2.dat");
+            MainDual.header_data += "SBL_SUB_BINB_RESULT="+ cu.HederData(PathProperties.local_Header, "sbl_sub_binb_result_h2.dat");
+            MainDual.header_data += "SBL_RESULT="+ cu.HederData(PathProperties.local_Header, "sbl_result_h2.dat");
         }
     }
     
@@ -184,15 +230,22 @@ public class CommonUtil {
         CommonUtil cu = new CommonUtil();
         
         if (cu.HederData(PathProperties.local_Header, "lc_seq_h1.dat").trim().equals("OPERATOR_ID")) {
-
             MainDual.main_operatorId_bt.setEnabled(false);
-            MainDual.main_test_in_auto_bt.setEnabled(true);
-            MainDual.main_test_in_manual_bt.setEnabled(true);
+            
+            if (MainDual.srqkind.equals("ON") ) {
+                MainDual.main_test_in_auto_bt.setEnabled(true);
+                MainDual.main_test_in_manual_bt.setEnabled(false);
+            } else {
+                MainDual.main_test_in_auto_bt.setEnabled(false);
+                MainDual.main_test_in_manual_bt.setEnabled(true);
+            }
+            
             MainDual.main_re_test_end_bt.setEnabled(false);
             MainDual.main_final_test_end_bt.setEnabled(false);
             MainDual.main_test_in_cancel_bt.setEnabled(true);
             MainDual.main_pre_pgm_restore_bt.setEnabled(true);
-
+            MainDual.main_radio_st1.setSelected(true);
+            
         } else if (cu.HederData(PathProperties.local_Header, "lc_seq_h1.dat").trim().equals("TEST_IN_AUTO")) {
             
             MainDual.main_operatorId_bt.setEnabled(false);
@@ -204,7 +257,7 @@ public class CommonUtil {
             MainDual.main_pre_pgm_restore_bt.setEnabled(true);
 
         } else if (cu.HederData(PathProperties.local_Header, "lc_seq_h1.dat").trim().equals("TEST_IN_MANUAL")) {
-
+            
             MainDual.main_operatorId_bt.setEnabled(false);
             MainDual.main_test_in_auto_bt.setEnabled(false);
             MainDual.main_test_in_manual_bt.setEnabled(false);
@@ -218,22 +271,31 @@ public class CommonUtil {
             MainDual.main_operatorId_bt.setEnabled(false);
             MainDual.main_test_in_auto_bt.setEnabled(false);
             MainDual.main_test_in_manual_bt.setEnabled(false);
-            MainDual.main_re_test_end_bt.setEnabled(true);
-            MainDual.main_final_test_end_bt.setEnabled(true);
+            if (MainDual.srqkind.equals("ON") ) {
+                MainDual.main_re_test_end_bt.setEnabled(false);
+                MainDual.main_final_test_end_bt.setEnabled(false);
+            } else {
+                MainDual.main_re_test_end_bt.setEnabled(true);
+                MainDual.main_final_test_end_bt.setEnabled(true);
+            }
             MainDual.main_test_in_cancel_bt.setEnabled(true);
             MainDual.main_pre_pgm_restore_bt.setEnabled(true);
 
         } else if (cu.HederData(PathProperties.local_Header, "lc_seq_h1.dat").trim().equals("FINAL_END")) {
-
             MainDual.main_operatorId_bt.setEnabled(false);
             MainDual.main_test_in_auto_bt.setEnabled(false);
             MainDual.main_test_in_manual_bt.setEnabled(false);
-            MainDual.main_re_test_end_bt.setEnabled(true);
-            MainDual.main_final_test_end_bt.setEnabled(true);
+            if (MainDual.srqkind.equals("ON") ) {
+                MainDual.main_re_test_end_bt.setEnabled(false);
+                MainDual.main_final_test_end_bt.setEnabled(false);
+            } else {
+                MainDual.main_re_test_end_bt.setEnabled(true);
+                MainDual.main_final_test_end_bt.setEnabled(true);
+            }
+            
             MainDual.main_test_in_cancel_bt.setEnabled(true);
             MainDual.main_pre_pgm_restore_bt.setEnabled(true);
         } else if (cu.HederData(PathProperties.local_Header, "lc_seq_h1.dat").trim().equals("PRE_PGM_RESTORE")) {
-
             MainDual.main_operatorId_bt.setEnabled(false);
             MainDual.main_test_in_auto_bt.setEnabled(false);
             MainDual.main_test_in_manual_bt.setEnabled(false);
@@ -243,7 +305,6 @@ public class CommonUtil {
             MainDual.main_pre_pgm_restore_bt.setEnabled(false);
             
         } else {
-            
             MainDual.main_operatorId_bt.setEnabled(true);
             MainDual.main_test_in_auto_bt.setEnabled(false);
             MainDual.main_test_in_manual_bt.setEnabled(false);
@@ -262,12 +323,18 @@ public class CommonUtil {
         if (cu.HederData(PathProperties.local_Header, "lc_seq_h2.dat").trim().equals("OPERATOR_ID")) {
 
             MainDual.main_operatorId_bt.setEnabled(false);
-            MainDual.main_test_in_auto_bt.setEnabled(true);
-            MainDual.main_test_in_manual_bt.setEnabled(true);
+            if (MainDual.srqkind.equals("ON") ) {
+                MainDual.main_test_in_auto_bt.setEnabled(true);
+                MainDual.main_test_in_manual_bt.setEnabled(false);
+            } else {
+                MainDual.main_test_in_auto_bt.setEnabled(false);
+                MainDual.main_test_in_manual_bt.setEnabled(true);
+            }
             MainDual.main_re_test_end_bt.setEnabled(false);
             MainDual.main_final_test_end_bt.setEnabled(false);
             MainDual.main_test_in_cancel_bt.setEnabled(true);
             MainDual.main_pre_pgm_restore_bt.setEnabled(true);
+            MainDual.main_radio_st2.setSelected(true);
 
         } else if (cu.HederData(PathProperties.local_Header, "lc_seq_h2.dat").trim().equals("TEST_IN_AUTO")) {
             
@@ -330,30 +397,8 @@ public class CommonUtil {
         }
     }
     
-    
-    // 커맨드 명령 사용 리던 데이터를 읽어서 파일로 만든다.
-//    public String execExecutionFile(String cmd, String path, String file_name) {
-//        try {
-//            Process exec_cmd = Runtime.getRuntime().exec(cmd);
-//            BufferedReader err = new BufferedReader(new InputStreamReader(exec_cmd.getErrorStream()));
-//
-//            while (true) {
-//                String errLine = err.readLine();
-//                if (errLine == null) {
-//                    break;
-//                } else {
-//                    System.out.println(errLine);
-//                }
-//            }
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return FileReaderData(path, file_name, true);
-//    }
-    
-    public String execExecutionFile(String cmd, String path, String file_name) {
-
+    // exec 실행
+    public void execExecution(String cmd) {
         Runtime run = Runtime.getRuntime();
         Process p = null;
 
@@ -369,17 +414,6 @@ public class CommonUtil {
                 if (!gb1.isAlive() && !gb2.isAlive()) { //두개의 스레드가 정지할면 프로세스 종료때까지 기다린다.
                     p.waitFor();
                     break;
-                }
-            }
-
-            BufferedReader err = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-
-            while (true) {
-                String errLine = err.readLine();
-                if (errLine == null) {
-                    break;
-                } else {
-                    System.out.println(errLine);
                 }
             }
 
@@ -392,97 +426,35 @@ public class CommonUtil {
             if (p != null)
                 p.destroy();
         }
-        return FileReaderData(path, file_name, true);
     }
     
-    
-    // 커맨드 명령 사용 리던 데이터를 읽어서 파일로 만든다.
-//    public String execExecutionInfo(String cmd) {
-//        String cmd_name = null;
-//        try {
-//            Process exec_cmd = Runtime.getRuntime().exec(cmd);
-//
-//            BufferedReader exec_data = new BufferedReader(new InputStreamReader(exec_cmd.getInputStream()));
-//
-//            while (true) {
-//                String exec_data_line = exec_data.readLine();
-//                if (exec_data_line == null) {
-//                    break;
-//                } else {
-//                    cmd_name += exec_data_line + "\n";
-//                    MainDual.appendToPane(MainDual.main_log_textPane, "exec :" + exec_data_line + "\n", Color.BLACK);
-//                }
-//            }
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return cmd_name;
-//    }
-    
-    // 커맨드 명령 사용 리던 데이터를 읽어서 파일로 만든다.
-    public String execExecutionInfo(String cmd) {
-        String cmd_name = null;
-        Runtime run = Runtime.getRuntime();
-        Process p = null;
-        
+    /* exec 명령을 사용해서 데이터를 읽어 온다.*/
+    public String executeRuntime(String command) {
+        String return_data = null;
         try {
-
-            p = run.exec(cmd);
-            StreamGobbler gb1 = new StreamGobbler(p.getInputStream());
-            StreamGobbler gb2 = new StreamGobbler(p.getErrorStream());
-            gb1.start();
-            gb2.start();
+            Process process = Runtime.getRuntime().exec(command);
+            BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
             while (true) {
-                if (!gb1.isAlive() && !gb2.isAlive()) { //두개의 스레드가 정지할면 프로세스 종료때까지 기다린다.
-                    p.waitFor();
+                String line = in.readLine();
+                if (line == null) {
                     break;
                 }
+                return_data += line + "\n";
             }
-              
-            BufferedReader exec_data = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+            BufferedReader err = new BufferedReader(new InputStreamReader(process.getErrorStream()));
 
             while (true) {
-                String exec_data_line = exec_data.readLine();
-                if (exec_data_line == null) {
+                String line = err.readLine();
+                if (line == null)
                     break;
-                } else {
-                    cmd_name += exec_data_line + "\n";
-                    MainDual.appendToPane(MainDual.main_log_textPane, "exec :" + exec_data_line + "\n", Color.BLACK);
-                }
             }
-
-        } catch (IOException e) {
+            process.waitFor();
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }finally{
-            if(p != null) p.destroy();
-        } 
-        return cmd_name;
-    }
-    
-    
-    // exec 실행
-    public void execExecution(String cmd) {
-        try {
-            Process exec_cmd = Runtime.getRuntime().exec(cmd);
-            BufferedReader err = new BufferedReader(new InputStreamReader(exec_cmd.getErrorStream()));
-
-            while (true) {
-                String errLine = err.readLine();
-                if (errLine == null) {
-                    break;
-                } else {
-                    MainDual.appendToPane(MainDual.main_log_textPane, "ERROR :" + cmd +"\n", Color.RED);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            MainDual.appendToPane(MainDual.main_log_textPane, "ERROR : IOException" +"\n", Color.RED);
         }
+        return return_data;
     }
     
     public void FileNew(String path, String file_name, String write, boolean overwrite) {
@@ -534,16 +506,23 @@ public class CommonUtil {
     
     // 파일 text 데이터 읽어 오기
     public String HederData(String path, String file_name) {
-        
+
+        File fileDir = new File(path);
+
+        if (!fileDir.exists()) {
+            fileDir.mkdirs();
+        }
+
         File file = new File(path + file_name);
-        
+
         String return_value = "";
-        
+
         // 파일 있는지 조회
         if (file.exists()) {
             return_value = FileReaderData(path, file_name, true);
         } else {
             // true 지정시 파일의 기존 내용에 이어서 작성
+
             BufferedWriter fw;
             try {
                 fw = new BufferedWriter(new FileWriter(path + file_name, false));
@@ -551,7 +530,7 @@ public class CommonUtil {
                 fw.write("0");
                 fw.flush();
                 fw.close();
-                
+
                 return_value = FileReaderData(path, file_name, true);
             } catch (IOException e) {
                 // TODO Auto-generated catch block
@@ -587,7 +566,7 @@ public class CommonUtil {
         fd.delete();
     }
     
-    public void Sequence (Date bin_back_dt) {
+    public void Sequence (Date bin_back_dt, String actionBt) {
         
         CommonUtil cu = new CommonUtil();
         MainDual.header_data = "";
@@ -598,17 +577,46 @@ public class CommonUtil {
         
         // 가시데이터 가져와서 넣기
         if (MainDual.main_radio_st1.isSelected()) {
-            String header_data = MainDual.header_data;
-            String bin_data = cu.FileReaderData(PathProperties.local_08, "input_lotid"+MainDual.main_lotno_text_st1.getText()+"_casi_report-"+sdf.format(bin_back_dt)+".HEADA", false);
-            header_data += "\n"+bin_data; 
-            cu.FileNew(PathProperties.ftpcasi , "input_lotid"+MainDual.main_lotno_text_st1.getText()+"_casi_report-"+sdf.format(bin_back_dt)+".HEADA", header_data, true);
-            ftpModule.fileCopy(PathProperties.ftpcasi+ "input_lotid"+MainDual.main_lotno_text_st1.getText()+"_casi_report-"+sdf.format(bin_back_dt)+".HEADA", PathProperties.ftppre + MainDual.main_lotno_text_st1.getText()+"_casi_report-"+sdf.format(bin_back_dt)+".HEADA");
+            if ("CANCEL".equals(actionBt)) {
+                if (!(this.casiFileName().equals(""))) {
+                    String header_data = MainDual.header_data;
+                    String bin_data = "<CASI>\n";
+                    bin_data += cu.FileReaderData(PathProperties.ftpcasi, this.casiFileName(), false);
+                    bin_data += "</CASI>\n";
+                    header_data += "\n"+bin_data; 
+                    cu.FileNew(PathProperties.lc_cancel_bin , "HTA01_"+cu.HederData(PathProperties.local_Header, "lot_id_h1.dat").trim()+"_CANCEL_REPORT_"+sdf.format(bin_back_dt)+".HEADA", header_data, true);
+                    ftpModule.fileCopy(PathProperties.lc_cancel_bin+ "HTA01_"+cu.HederData(PathProperties.local_Header, "lot_id_h1.dat").trim()+"_CANCEL_REPORT_"+sdf.format(bin_back_dt)+".HEADA", PathProperties.ftppre + "HTA01_"+cu.HederData(PathProperties.local_Header, "lot_id_h1.dat").trim()+"_CANCEL_REPORT_"+sdf.format(bin_back_dt)+".HEADA");
+                }
+            } else {
+                String header_data = MainDual.header_data;
+                String bin_data = "<CASI>\n";
+                bin_data += cu.FileReaderData(PathProperties.ftpcasi, "HTA01_"+cu.HederData(PathProperties.local_Header, "lot_id_h1.dat").trim()+"_CASI_REPORT_"+sdf.format(bin_back_dt)+".HEADA", false);
+                bin_data += "</CASI>\n";
+                header_data += "\n"+bin_data; 
+                cu.FileNew(PathProperties.lc_casi_bin , "HTA01_"+cu.HederData(PathProperties.local_Header, "lot_id_h1.dat").trim()+"_CASI_REPORT_"+sdf.format(bin_back_dt)+".HEADA", header_data, true);
+                ftpModule.fileCopy(PathProperties.lc_casi_bin+ "HTA01_"+cu.HederData(PathProperties.local_Header, "lot_id_h1.dat").trim()+"_CASI_REPORT_"+sdf.format(bin_back_dt)+".HEADA", PathProperties.ftppre + "HTA01_"+cu.HederData(PathProperties.local_Header, "lot_id_h1.dat").trim()+"_CASI_REPORT_"+sdf.format(bin_back_dt)+".HEADA");
+            }
         } else {
-            String header_data = MainDual.header_data;
-            String bin_data = cu.FileReaderData(PathProperties.local_08, "input_lotid"+MainDual.main_lotno_text_st2.getText()+"_casi_report-"+sdf.format(bin_back_dt)+".HEADB", false);
-            header_data += "\n"+bin_data;
-            cu.FileNew(PathProperties.ftpcasi , "input_lotid"+MainDual.main_lotno_text_st2.getText()+"_casi_report-"+sdf.format(bin_back_dt)+".HEADB", header_data, true);
-            ftpModule.fileCopy(PathProperties.ftpcasi + "input_lotid"+MainDual.main_lotno_text_st2.getText()+"_casi_report-"+sdf.format(bin_back_dt)+".HEADB", PathProperties.ftppre + MainDual.main_lotno_text_st2.getText()+"_casi_report-"+sdf.format(bin_back_dt)+".HEADB");
+            
+            if ("CANCEL".equals(actionBt)) {
+                if (!(this.casiFileName().equals(""))) {
+                    String header_data = MainDual.header_data;
+                    String bin_data = "<CASI>\n"; 
+                    bin_data += cu.FileReaderData(PathProperties.ftpcasi, this.casiFileName(), false);
+                    bin_data += "</CASI>\n";
+                    header_data += "\n"+bin_data;
+                    cu.FileNew(PathProperties.lc_cancel_bin , "HTA01_"+cu.HederData(PathProperties.local_Header, "lot_id_h2.dat").trim()+"_CANCEL_REPORT_"+sdf.format(bin_back_dt)+".HEADB", header_data, true);
+                    ftpModule.fileCopy(PathProperties.lc_cancel_bin + "HTA01_"+cu.HederData(PathProperties.local_Header, "lot_id_h2.dat").trim()+"_CANCEL_REPORT_"+sdf.format(bin_back_dt)+".HEADB", PathProperties.ftppre + "HTA01_"+cu.HederData(PathProperties.local_Header, "lot_id_h2.dat").trim()+"_CANCEL_REPORT_"+sdf.format(bin_back_dt)+".HEADB");
+                }
+            } else {
+                String header_data = MainDual.header_data;
+                String bin_data = "<CASI>\n"; 
+                bin_data += cu.FileReaderData(PathProperties.ftpcasi, "HTA01_"+cu.HederData(PathProperties.local_Header, "lot_id_h2.dat").trim()+"_CASI_REPORT_"+sdf.format(bin_back_dt)+".HEADB", false);
+                bin_data += "</CASI>\n";
+                header_data += "\n"+bin_data;
+                cu.FileNew(PathProperties.lc_casi_bin , "HTA01_"+cu.HederData(PathProperties.local_Header, "lot_id_h2.dat").trim()+"_CASI_REPORT_"+sdf.format(bin_back_dt)+".HEADB", header_data, true);
+                ftpModule.fileCopy(PathProperties.lc_casi_bin + "HTA01_"+cu.HederData(PathProperties.local_Header, "lot_id_h2.dat").trim()+"_CASI_REPORT_"+sdf.format(bin_back_dt)+".HEADB", PathProperties.ftppre + "HTA01_"+cu.HederData(PathProperties.local_Header, "lot_id_h2.dat").trim()+"_CASI_REPORT_"+sdf.format(bin_back_dt)+".HEADB");
+            }
         }
         
         // 칩데이터 생성
@@ -619,79 +627,53 @@ public class CommonUtil {
             
             // String chipid_data = cu.execExecutionFile("/home/fsdiag/NLcommand_FS/LCommand.sh", "로컬 경로", "SUM1.DAT");
             // 테스트
-            String chipid_data = cu.FileReaderData(PathProperties.local_08, "input_lotid123456_chipid_report-20170630135555.HEADA", true);
-            header_data += "\n" + chipid_data;
-            cu.FileNew(PathProperties.ftpchid, "input_lotid123456_chipid_report-20170630135555.HEADA", header_data, true);
-            ftpModule.fileCopy(PathProperties.ftpchid + "input_lotid123456_chipid_report-20170630135555.HEADA", PathProperties.ftppre + "input_lotid123456_chipid_report-20170630135555.HEADA");
+            // String chipid_data = "";
+            // chipid_data = cu.FileReaderData(PathProperties.local_08, "input_lotid123456_chipid_report-20170630135555.HEADA", true);
+            // header_data += "\n" + chipid_data;
+            // cu.FileNew(PathProperties.ftpchid, "input_lotid123456_chipid_report-20170630135555.HEADA", header_data, true);
+            // ftpModule.fileCopy(PathProperties.ftpchid + "input_lotid123456_chipid_report-20170630135555.HEADA", PathProperties.ftppre + "input_lotid123456_chipid_report-20170630135555.HEADA");
         } else {
             Date chipid_dt = new Date();
             // 칩데이터 생성
             String header_data = MainDual.header_data;
             // String chipid_data = cu.execExecutionFile("/home/fsdiag/NLcommand_FS/LCommand.sh", "로컬 경로", "SUM1.DAT");
             // 테스트
-            String chipid_data = cu.FileReaderData(PathProperties.local_08, "input_lotid123456_chipid_report-20170630135555.HEADB", true);
-            header_data += "\n" + chipid_data;
-            cu.FileNew(PathProperties.ftpchid, "input_lotid123456_chipid_report-20170630135555.HEADB", header_data, true);
-            ftpModule.fileCopy(PathProperties.ftpchid + "input_lotid123456_chipid_report-20170630135555.HEADB", PathProperties.ftppre + "input_lotid123456_chipid_report-20170630135555.HEADB");
+            // String chipid_data = cu.FileReaderData(PathProperties.local_08, "input_lotid123456_chipid_report-20170630135555.HEADB", true);
+            // header_data += "\n" + chipid_data;
+            // cu.FileNew(PathProperties.ftpchid, "input_lotid123456_chipid_report-20170630135555.HEADB", header_data, true);
+            // ftpModule.fileCopy(PathProperties.ftpchid + "input_lotid123456_chipid_report-20170630135555.HEADB", PathProperties.ftppre + "input_lotid123456_chipid_report-20170630135555.HEADB");
         }
         
-        // 서브빈
+        // NG bin
         if (MainDual.main_radio_st1.isSelected()) {
             String header_data = MainDual.header_data;
             Date sub_bin_dt = new Date();
-            // String sub_bin_data = cu.execExecutionFile("/home/fsdiag/NLcommand_FS/LCommand.sh", "로컬 경로", "SUM1.DAT");
+            
+            // cu.execExecution("/home/fsdiag/NLcommand_FS/LCommand.sh");
             // 테스트
-            String sub_bin_data = cu.FileReaderData(PathProperties.local_08, "input_lotid123456_subbin_report-20170630135555.HEADA", true);
-            cu.SubBinData(sub_bin_data);
+            String sub_bin_data = cu.FileReaderData(PathProperties.local, "SUM1.DAT", true);
+            // 삭제 :  cu.SubBinData(sub_bin_data);
+            
+            // test_bin 데이터 계산
+            cu.BinCalculator(sub_bin_data);
             
             header_data += "\n" + sub_bin_data;
-            cu.FileNew(PathProperties.ftp_sub_bin, "input_lotid123456_subbin_report-20170630135555.HEADA", header_data, true);
-            ftpModule.fileCopy(PathProperties.ftp_sub_bin + "input_lotid123456_subbin_report-20170630135555.HEADA", PathProperties.ftppre + "input_lotid123456_subbin_report-20170630135555.HEADA");
-        
+            cu.FileNew(PathProperties.lc_ng_bin, "HTA01_"+cu.HederData(PathProperties.local_Header, "lot_id_h1.dat").trim()+"_NGBIN_REPORT_"+sdf.format(bin_back_dt)+".HEADA", header_data, true);
+            ftpModule.fileCopy(PathProperties.lc_ng_bin + "HTA01_"+cu.HederData(PathProperties.local_Header, "lot_id_h1.dat").trim()+"_NGBIN_REPORT_"+sdf.format(bin_back_dt)+".HEADA", PathProperties.ftppre + "HTA01_"+cu.HederData(PathProperties.local_Header, "lot_id_h1.dat").trim()+"_NGBBIN_REPORT_"+sdf.format(bin_back_dt)+".HEADA");
         } else {
             Date sub_bin_dt = new Date();
             String header_data = MainDual.header_data;
             // String sub_bin_data = cu.execExecutionFile("/home/fsdiag/NLcommand_FS/LCommand.sh", "로컬 경로", "SUM1.DAT");
             // 테스트
-            String sub_bin_data = cu.FileReaderData(PathProperties.local_08, "input_lotid123456_subbin_report-20170630135555.HEADB", true);
-            cu.SubBinData(sub_bin_data);
+            String sub_bin_data = cu.FileReaderData(PathProperties.local, "SUM1.DAT", true);
+            // 삭제 : cu.SubBinData(sub_bin_data);
             
             header_data += "\n" + sub_bin_data;
-            cu.FileNew(PathProperties.ftp_sub_bin, "input_lotid123456_subbin_report-20170630135555.HEADB", header_data, true);
-            ftpModule.fileCopy(PathProperties.ftp_sub_bin + "input_lotid123456_subbin_report-20170630135555.HEADB", PathProperties.ftppre + "input_lotid123456_subbin_report-20170630135555.HEADB");
+            cu.FileNew(PathProperties.lc_ng_bin, "HTA01_"+cu.HederData(PathProperties.local_Header, "lot_id_h2.dat").trim()+"_NGBIN_REPORT_"+sdf.format(bin_back_dt)+".HEADA", header_data, true);
+            ftpModule.fileCopy(PathProperties.lc_ng_bin + "HTA01_"+cu.HederData(PathProperties.local_Header, "lot_id_h2.dat").trim()+"_NGBIN_REPORT_"+sdf.format(bin_back_dt)+".HEADA", PathProperties.ftppre + "HTA01_"+cu.HederData(PathProperties.local_Header, "lot_id_h2.dat").trim()+"_NGBBIN_REPORT_"+sdf.format(bin_back_dt)+".HEADA");
         }
     }
     
-    public void SubBinData(String sub_bin_data) {
-        String[] bin = sub_bin_data.split("\n");
-        String[] bin_data = null;
-
-        for (int i = 0; i < 1; i++) {
-            bin_data = bin[i].split(" ");
-        }
-
-        for (int x = 0; x < bin_data.length; x++) {
-            if (MainDual.main_radio_st1.isSelected()) {
-                MainDual.sub_bin_map_st1.put("bin_" + x, bin_data[x]);
-            } else {
-                MainDual.sub_bin_map_st2.put("bin_" + x, bin_data[x]);
-            }
-
-            for (int z = 0; z < bin_data[x].length(); z++) {
-                if (bin_data[x].charAt(z) != '0') {
-                    if (MainDual.main_radio_st1.isSelected()) {
-                        MainDual.sub_bin_map_st1.put("bin_" + x, bin_data[x].substring(z));
-                    } else {
-                        MainDual.sub_bin_map_st2.put("bin_" + x, bin_data[x].substring(z));
-                    }
-
-                    break;
-                }
-            }
-        }
-    }
-
-
     // 빈데이터 값을 변경 한다. 
     public String getBinDataFormat(String binNum) {
 
@@ -707,6 +689,106 @@ public class CommonUtil {
         return zero;
     }
     
+    
+    public void BinCalculator(String sub_bin_data) {
+
+        int startIndex = sub_bin_data.indexOf(">");
+        int endIndex = sub_bin_data.indexOf("</MAIN_BIN>");
+        String binNumber = sub_bin_data.substring((startIndex + 1), endIndex).trim();
+
+        String[] values = binNumber.split("\\s+");
+
+        MainDual.test_bin = new HashMap();
+
+        for (int x = 0; x < values.length; x++) {
+            MainDual.test_bin.put("testBin_" + (x + 1), values[x].trim());
+        }
+
+        MainDual.testBin1 += Integer.parseInt(MainDual.test_bin.get("testBin_1").toString());
+        MainDual.testBin2 += Integer.parseInt(MainDual.test_bin.get("testBin_2").toString());
+        MainDual.testBin3 += Integer.parseInt(MainDual.test_bin.get("testBin_3").toString());
+        MainDual.testBin4 += Integer.parseInt(MainDual.test_bin.get("testBin_4").toString());
+        MainDual.testBin5 += Integer.parseInt(MainDual.test_bin.get("testBin_5").toString());
+        MainDual.testBin6 += Integer.parseInt(MainDual.test_bin.get("testBin_6").toString());
+        MainDual.testBin7 += Integer.parseInt(MainDual.test_bin.get("testBin_7").toString());
+        MainDual.testBin8 += Integer.parseInt(MainDual.test_bin.get("testBin_8").toString());
+        MainDual.testBin9 += Integer.parseInt(MainDual.test_bin.get("testBin_9").toString());
+    }
+    
+    public void HandlerbinCalculator(String handler_bin_data) {
+
+        int startIndex = handler_bin_data.indexOf(">");
+        int endIndex = handler_bin_data.indexOf("</MAIN_BIN>");
+        String binNumber = handler_bin_data.substring((startIndex + 1), endIndex).trim();
+
+        String[] values = binNumber.split("\\s+");
+
+        MainDual.handler_bin = new HashMap();
+
+        for (int x = 0; x < values.length; x++) {
+            MainDual.handler_bin.put("handlerBin_" + (x + 1), values[x].trim());
+        }
+        
+        MainDual.handlerBin1 += Integer.parseInt(MainDual.handler_bin.get("handlerBin_1").toString());
+        MainDual.handlerBin2 += Integer.parseInt(MainDual.handler_bin.get("handlerBin_2").toString());
+        MainDual.handlerBin3 += Integer.parseInt(MainDual.handler_bin.get("handlerBin_3").toString());
+        MainDual.handlerBin4 += Integer.parseInt(MainDual.handler_bin.get("handlerBin_4").toString());
+        MainDual.handlerBin5 += Integer.parseInt(MainDual.handler_bin.get("handlerBin_5").toString());
+        MainDual.handlerBin6 += Integer.parseInt(MainDual.handler_bin.get("handlerBin_6").toString());
+        MainDual.handlerBin7 += Integer.parseInt(MainDual.handler_bin.get("handlerBin_7").toString());
+        MainDual.handlerBin8 += Integer.parseInt(MainDual.handler_bin.get("handlerBin_8").toString());
+        MainDual.handlerBin9 += Integer.parseInt(MainDual.handler_bin.get("handlerBin_9").toString());
+    }
+    
+    
+    // SBL 판정 결과 값 헤터 파일 생성
+    public void SblBinResult(int positionNum, String handlerBin, String operatorBin, String fileDataName, CommonUtil cu) {
+        
+        String passBinSelection = "";
+        if (MainDual.main_radio_st1.isSelected()) {
+            passBinSelection = cu.FileReaderData(PathProperties.ftplocal, "pass_bin_selection_h1.dat", true).trim();
+            
+            if (String.valueOf(passBinSelection.charAt(positionNum)).equals("Y")) {
+                if (handlerBin.equals(operatorBin)) {
+                    cu.FileNew(PathProperties.local_Header, fileDataName, "NULL", false);
+                } else {
+                    cu.FileNew(PathProperties.local_Header, fileDataName, "ERROR", false);
+                    MainDual.sblResultErrorCount_h1++;
+                }
+            } else {
+                cu.FileNew(PathProperties.local_Header, fileDataName, "NULL", false);
+            }
+        } else {
+            passBinSelection = cu.FileReaderData(PathProperties.ftplocal, "pass_bin_selection_h2.dat", true).trim();
+            
+            if (String.valueOf(passBinSelection.charAt(positionNum)).equals("Y")) {
+                if (handlerBin.equals(operatorBin)) {
+                    cu.FileNew(PathProperties.local_Header, fileDataName, "NULL", false);
+                } else {
+                    cu.FileNew(PathProperties.local_Header, fileDataName, "ERROR", false);
+                    MainDual.sblResultErrorCount_h2++;
+                }
+            } else {
+                cu.FileNew(PathProperties.local_Header, fileDataName, "NULL", false);
+            }
+        }
+    }
+    
+    public String casiFileName() {
+
+        CommonUtil cu = new CommonUtil();
+        List casiLi = cu.getDirFileList(PathProperties.ftpcasi);
+
+        String casiName = "";
+
+        for (int i = 0; i < casiLi.size(); i++) {
+            casiName = casiLi.get(i).toString();
+        }
+
+        int casiFileLastIndex = casiName.lastIndexOf("\\");
+
+        return casiName.substring((casiFileLastIndex + 1));
+    }
 }
 
 class StreamGobbler extends Thread

@@ -22,28 +22,29 @@ import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
 /**
- * <code>SettingPassWord.java</code>
+ * <code>TesterModelPassWord.java</code>
  * 
  * @company : FAMOS 
- * @Description : 셋팅 관리자 패스워드 팝업
+ * @Description : 테스트모델설정 패스워드
  * @author : 김이주 차장
  * @modify :
- * @since : 2017.02.03
+ * @since : 2017.03.23
  * @version : 1.0
  */
 
-public class SRQKINDPassWord extends JDialog {
+public class TesterModelPassWord extends JDialog {
 
     private final JPanel setting_password_panel = new JPanel();
     private JPasswordField srqkind_password_text;
-    JLabel srqkind_pass_error_lb;
+    JLabel tester_model_pass_error_lb;
+    
     /**
      * Create the dialog.
      */
-    public SRQKINDPassWord(final Frame parent) {
+    public TesterModelPassWord(final Frame parent) {
 
         super(parent, true);
-        setTitle("SRQKIND");
+        setTitle("TESTER MODEL");
 
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
@@ -51,7 +52,7 @@ public class SRQKINDPassWord extends JDialog {
         Dimension frameSize = MainDual.main_frm_d.getSize();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-        setBounds((screenSize.width - (frameSize.width / 2)) / 2, (screenSize.height - (frameSize.height / 2)) / 2, 286, 153);
+        setBounds((screenSize.width - (frameSize.width / 2)) / 2, (screenSize.height - (frameSize.height / 2)) / 2, 286, 152);
         getContentPane().setLayout(new BorderLayout());
         setting_password_panel.setBackground(Color.WHITE);
         setting_password_panel.setForeground(Color.RED);
@@ -67,7 +68,7 @@ public class SRQKINDPassWord extends JDialog {
         {
             JPanel buttonPane = new JPanel();
             buttonPane.setBackground(Color.WHITE);
-            buttonPane.setBounds(7, 70, 253, 35);
+            buttonPane.setBounds(7, 68, 253, 35);
             setting_password_panel.add(buttonPane);
             buttonPane.setLayout(null);
             {
@@ -78,10 +79,10 @@ public class SRQKINDPassWord extends JDialog {
                         String password = srqkind_password_text.getText();
                         if (password.equals("famos12#")) {
                             dispose();
-                            ToolSRQKIND ToolSRQKIND = new ToolSRQKIND(MainDual.main_frm_d);
-                            ToolSRQKIND.setVisible(true);
+                            TesterModel TesterModel = new TesterModel(MainDual.main_frm_d);
+                            TesterModel.setVisible(true);
                         } else {
-                            srqkind_pass_error_lb.setText("! Administrator password is mismatched.");
+                            tester_model_pass_error_lb.setText("! Administrator password is mismatched.");
                         }
                     }
                 });
@@ -114,15 +115,16 @@ public class SRQKINDPassWord extends JDialog {
             JSeparator separator = new JSeparator();
             separator.setForeground(Color.LIGHT_GRAY);
             separator.setBackground(Color.WHITE);
-            separator.setBounds(7, 63, 253, 2);
+            separator.setBounds(7, 60, 253, 2);
             setting_password_panel.add(separator);
         }
-        
-        srqkind_pass_error_lb = new JLabel("");
-        srqkind_pass_error_lb.setHorizontalAlignment(SwingConstants.CENTER);
-        srqkind_pass_error_lb.setForeground(Color.RED);
-        srqkind_pass_error_lb.setFont(new Font("Tahoma", Font.BOLD, 12));
-        srqkind_pass_error_lb.setBounds(7, 42, 253, 18);
-        setting_password_panel.add(srqkind_pass_error_lb);
+        {
+            tester_model_pass_error_lb = new JLabel("");
+            tester_model_pass_error_lb.setHorizontalAlignment(SwingConstants.CENTER);
+            tester_model_pass_error_lb.setForeground(Color.RED);
+            tester_model_pass_error_lb.setFont(new Font("Tahoma", Font.BOLD, 12));
+            tester_model_pass_error_lb.setBounds(7, 38, 253, 18);
+            setting_password_panel.add(tester_model_pass_error_lb);
+        }
     }
 }

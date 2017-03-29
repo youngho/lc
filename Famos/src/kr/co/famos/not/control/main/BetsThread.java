@@ -31,12 +31,12 @@ public class BetsThread extends Thread {
 
             while ((server_info = br.readLine()) != null) {
                 tmpData += server_info + "\n";
-                System.out.println("tmpData ===> " + tmpData);
-                
                 if (server_info.indexOf("</MSG>") > -1) {
                     break;
                 }
             }
+            
+            System.out.println("tmpData ====> " + tmpData);
             
             // 배츠에서 받아온 정보를 분리 하는 작업
             BetsSplit bs = new BetsSplit();

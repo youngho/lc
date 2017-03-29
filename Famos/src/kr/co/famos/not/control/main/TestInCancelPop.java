@@ -8,18 +8,6 @@ import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.JButton;
@@ -27,15 +15,13 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import org.apache.commons.net.ftp.FTPClient;
-
-import kr.co.famos.not.control.ftp.FtpConnect;
 import kr.co.famos.not.control.ftp.ftpModule;
 import kr.co.famos.not.control.util.CommonUtil;
+import kr.co.famos.not.control.util.GradientButton;
 import kr.co.famos.not.control.util.PathProperties;
+import javax.swing.JSeparator;
 
 /**
  * <code>TestInCancelPop.java</code>
@@ -66,11 +52,12 @@ public class TestInCancelPop extends JDialog {
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         /* 프레임 화면 가운데 */
-        Dimension frameSize = parent.getSize();
+        Dimension frameSize = MainDual.main_frm_d.getSize();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-        setBounds((screenSize.width - frameSize.width / 3) / 2, (screenSize.height - frameSize.height / 3) / 2, 416, 189);
+        setBounds((screenSize.width - (frameSize.width / 2)) / 2, (screenSize.height - (frameSize.height / 2)) / 2, 416, 215);
         getContentPane().setLayout(new BorderLayout());
+        test_in_cancel_parent_panel.setBackground(Color.WHITE);
         test_in_cancel_parent_panel.setForeground(Color.RED);
         test_in_cancel_parent_panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
@@ -79,46 +66,49 @@ public class TestInCancelPop extends JDialog {
         {
             JPanel test_in_cancel_panel = new JPanel();
             test_in_cancel_panel.setLayout(null);
-            test_in_cancel_panel.setBackground(Color.LIGHT_GRAY);
+            test_in_cancel_panel.setBackground(new Color(20, 86, 148));
             test_in_cancel_panel.setBounds(7, 12, 384, 89);
             test_in_cancel_parent_panel.add(test_in_cancel_panel);
             {
                 JLabel test_in_cancel_title_lb = new JLabel("HEAD A");
-                test_in_cancel_title_lb.setFont(new Font("굴림", Font.BOLD, 17));
+                test_in_cancel_title_lb.setForeground(Color.WHITE);
+                test_in_cancel_title_lb.setFont(new Font("Tahoma", Font.BOLD, 17));
                 test_in_cancel_title_lb.setBounds(157, 52, 70, 18);
                 test_in_cancel_panel.add(test_in_cancel_title_lb);
             }
             {
                 JLabel test_in_cancel_header_lb = new JLabel("TEST_IN_CANCEL");
-                test_in_cancel_header_lb.setFont(new Font("굴림", Font.BOLD, 17));
+                test_in_cancel_header_lb.setForeground(Color.WHITE);
+                test_in_cancel_header_lb.setFont(new Font("Tahoma", Font.BOLD, 17));
                 test_in_cancel_header_lb.setBounds(116, 17, 152, 18);
                 test_in_cancel_panel.add(test_in_cancel_header_lb);
             }
         }
         {
             JPanel buttonPane = new JPanel();
-            buttonPane.setBounds(17, 108, 367, 35);
+            buttonPane.setBackground(Color.WHITE);
+            buttonPane.setBounds(17, 123, 367, 35);
             test_in_cancel_parent_panel.add(buttonPane);
             buttonPane.setLayout(null);
             {
-                JButton test_in_cancel_bt_ok = new JButton("OK");
+                JButton test_in_cancel_bt_ok = new GradientButton("OK");
+                test_in_cancel_bt_ok.setFont(new Font("Tahoma", Font.BOLD, 15));
                 test_in_cancel_bt_ok.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-
                         dispose();
-
                         task = new TestInCancelProgress();
                         task.go();
                     }
                 });
-                test_in_cancel_bt_ok.setBounds(89, 5, 53, 27);
+                test_in_cancel_bt_ok.setBounds(89, 5, 63, 27);
                 test_in_cancel_bt_ok.setActionCommand("OK");
                 buttonPane.add(test_in_cancel_bt_ok);
                 getRootPane().setDefaultButton(test_in_cancel_bt_ok);
             }
 
             {
-                JButton test_in_cancel_bt_exit = new JButton("EXIT");
+                JButton test_in_cancel_bt_exit = new GradientButton("EXIT");
+                test_in_cancel_bt_exit.setFont(new Font("Tahoma", Font.BOLD, 15));
                 test_in_cancel_bt_exit.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         dispose();
@@ -129,6 +119,13 @@ public class TestInCancelPop extends JDialog {
                 test_in_cancel_bt_exit.setActionCommand("Cancel");
                 buttonPane.add(test_in_cancel_bt_exit);
             }
+        }
+        {
+            JSeparator separator = new JSeparator();
+            separator.setForeground(Color.LIGHT_GRAY);
+            separator.setBackground(Color.WHITE);
+            separator.setBounds(7, 113, 384, 1);
+            test_in_cancel_parent_panel.add(separator);
         }
     }
 }
@@ -159,40 +156,111 @@ class TestInCancelProgress {
                 
                 ld = new Loading(MainDual.main_frm_d);
                 ld.setVisible(true);
-
+                
                 CommonUtil cu = new CommonUtil();
-                
-                if (MainDual.main_radio_st1.isSelected()) {
-                    cu.FileNew(PathProperties.local_Header, "test_flow_h1.dat", "CANCEL", false);
-                } else {
-                    cu.FileNew(PathProperties.local_Header, "test_flow_h2.dat", "CANCEL", false);
-                }
-                
-                SimpleDateFormat final_end_time_sdf = new SimpleDateFormat("yyyyMMddHHmmss");
                 Date final_end_time_dt = new Date();
                 
                 if (MainDual.main_radio_st1.isSelected()) {
-                    // 현재 LOT에 대한 LC의 완료시점에서 LC의 모든 DATA가 RESET된 시점을 뺀값.
-                    cu.FileNew(PathProperties.local_Header, "final_end_time_h1.dat", final_end_time_sdf.format(final_end_time_dt), false);
+                    String prelot_end_time = cu.HederData(PathProperties.local_Header, "prelot_end_time_h1.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "prelot_end_time_h1.dat").trim();
+                    String sbl_result = cu.HederData(PathProperties.local_Header, "sbl_result_h1.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_result_h1.dat").trim();
+                    String sbl_yield_limit = cu.HederData(PathProperties.local_Header, "sbl_yield_limit_h1.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_yield_limit_h1.dat").trim();
+                    String sbl_sub_bina_counter = cu.HederData(PathProperties.local_Header, "sbl_sub_bina_counter_h1.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_sub_bina_counter_h1.dat").trim();
+                    String sbl_sub_bina_limit = cu.HederData(PathProperties.local_Header, "sbl_sub_bina_limit_h1.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_sub_bina_limit_h1.dat").trim();
+                    String sbl_sub_binb_counter = cu.HederData(PathProperties.local_Header, "sbl_sub_binb_counter_h1.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_sub_binb_counter_h1.dat").trim();
+                    String sbl_sub_binb_limit = cu.HederData(PathProperties.local_Header, "sbl_sub_binb_limit_h1.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_sub_binb_limit_h1.dat").trim();
+                    String sbl_bin9_counter = cu.HederData(PathProperties.local_Header, "sbl_bin9_counter_h1.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_bin9_counter_h1.dat").trim();
+                    String sbl_bin9_limit = cu.HederData(PathProperties.local_Header, "sbl_bin9_limit_h1.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_bin9_limit_h1.dat").trim();
+                    String bin_in_time = cu.HederData(PathProperties.local_Header, "bin_in_time_h1.dat").trim().equals("0") ? "0" : cu.HederData(PathProperties.local_Header, "bin_in_time_h1.dat").trim();
+                    String bin_end_time = cu.HederData(PathProperties.local_Header, "bin_end_time_h1.dat").trim().equals("0") ? "0" : cu.HederData(PathProperties.local_Header, "bin_end_time_h1.dat").trim();
+                    String sbl_bin8_limit = cu.HederData(PathProperties.local_Header, "sbl_bin8_limit_h1.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_bin8_limit_h1.dat").trim();
+                    String sbl_yield_result = cu.HederData(PathProperties.local_Header, "sbl_yield_result_h1.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_yield_result_h1.dat").trim();
+                    String sbl_bin1_result = cu.HederData(PathProperties.local_Header, "sbl_bin1_result_h1.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_bin1_result_h1.dat").trim();
+                    String sbl_bin2_result = cu.HederData(PathProperties.local_Header, "sbl_bin2_result_h1.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_bin2_result_h1.dat").trim();
+                    String sbl_bin3_result = cu.HederData(PathProperties.local_Header, "sbl_bin3_result_h1.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_bin3_result_h1.dat").trim();
+                    String sbl_bin4_result = cu.HederData(PathProperties.local_Header, "sbl_bin4_result_h1.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_bin4_result_h1.dat").trim();
+                    String sbl_bin5_result = cu.HederData(PathProperties.local_Header, "sbl_bin5_result_h1.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_bin5_result_h1.dat").trim();
+                    String sbl_bin6_result = cu.HederData(PathProperties.local_Header, "sbl_bin6_result_h1.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_bin6_result_h1.dat").trim();
+                    String sbl_bin7_result = cu.HederData(PathProperties.local_Header, "sbl_bin7_result_h1.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_bin7_result_h1.dat").trim();
+                    String sbl_bin8_result = cu.HederData(PathProperties.local_Header, "sbl_bin8_result_h1.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_bin8_result_h1.dat").trim();
+                    String sbl_bin9_result = cu.HederData(PathProperties.local_Header, "sbl_bin9_result_h1.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_bin9_result_h1.dat").trim();
+                    
+                    cu.FileNew(PathProperties.local_Header, "test_flow_h1.dat", "CANCEL", false);
+                    
+                    cu.FileNew(PathProperties.local_Header, "bin_in_time_h1.dat", bin_in_time, false);
+                    cu.FileNew(PathProperties.local_Header, "bin_end_time_h1.dat", bin_end_time, false);
+                    cu.FileNew(PathProperties.local_Header, "prelot_end_time_h1.dat", prelot_end_time, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_result_h1.dat", sbl_result, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_yield_limit_h1.dat", sbl_yield_limit, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_sub_bina_counter_h1.dat", sbl_sub_bina_counter, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_sub_bina_limit_h1.dat", sbl_sub_bina_limit, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_sub_binb_counter_h1.dat", sbl_sub_binb_counter, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_sub_binb_limit_h1.dat", sbl_sub_binb_limit, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_bin9_counter_h1.dat", sbl_bin9_counter, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_bin9_limit_h1.dat", sbl_bin9_limit, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_bin8_limit_h1.dat", sbl_bin8_limit, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_yield_result_h1.dat", sbl_yield_result, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_bin1_result_h1.dat", sbl_bin1_result, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_bin2_result_h1.dat", sbl_bin2_result, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_bin3_result_h1.dat", sbl_bin3_result, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_bin4_result_h1.dat", sbl_bin4_result, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_bin5_result_h1.dat", sbl_bin5_result, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_bin6_result_h1.dat", sbl_bin6_result, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_bin7_result_h1.dat", sbl_bin7_result, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_bin8_result_h1.dat", sbl_bin8_result, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_bin9_result_h1.dat", sbl_bin9_result, false);
+                            
                 } else {
-                    // 현재 LOT에 대한 LC의 완료시점에서 LC의 모든 DATA가 RESET된 시점을 뺀값.
-                    cu.FileNew(PathProperties.local_Header, "final_end_time_h2.dat", final_end_time_sdf.format(final_end_time_dt), false);
+                    String prelot_end_time = cu.HederData(PathProperties.local_Header, "prelot_end_time_h2.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "prelot_end_time_h2.dat").trim();
+                    String sbl_result = cu.HederData(PathProperties.local_Header, "sbl_result_h2.dat").trim().equals("0") ? "0" : cu.HederData(PathProperties.local_Header, "sbl_result_h2.dat").trim();
+                    String sbl_yield_limit = cu.HederData(PathProperties.local_Header, "sbl_yield_limit_h2.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_yield_limit_h2.dat").trim();
+                    String sbl_sub_bina_counter = cu.HederData(PathProperties.local_Header, "sbl_sub_bina_counter_h2.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_sub_bina_counter_h2.dat").trim();
+                    String sbl_sub_bina_limit = cu.HederData(PathProperties.local_Header, "sbl_sub_bina_limit_h2.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_sub_bina_limit_h2.dat").trim();
+                    String sbl_sub_binb_counter = cu.HederData(PathProperties.local_Header, "sbl_sub_binb_counter_h2.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_sub_binb_counter_h2.dat").trim();
+                    String sbl_sub_binb_limit = cu.HederData(PathProperties.local_Header, "sbl_sub_binb_limit_h2.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_sub_binb_limit_h2.dat").trim();
+                    String sbl_bin9_counter = cu.HederData(PathProperties.local_Header, "sbl_bin9_counter_h2.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_bin9_counter_h2.dat").trim();
+                    String sbl_bin9_limit = cu.HederData(PathProperties.local_Header, "sbl_bin9_limit_h2.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_bin9_limit_h2.dat").trim();
+                    String bin_in_time = cu.HederData(PathProperties.local_Header, "bin_in_time_h2.dat").trim().equals("0") ? "0" : cu.HederData(PathProperties.local_Header, "bin_in_time_h2.dat").trim();
+                    String bin_end_time = cu.HederData(PathProperties.local_Header, "bin_end_time_h2.dat").trim().equals("0") ? "0" : cu.HederData(PathProperties.local_Header, "bin_end_time_h2.dat").trim();
+                    String sbl_bin8_limit = cu.HederData(PathProperties.local_Header, "sbl_bin8_limit_h2.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_bin8_limit_h2.dat").trim();
+                    String sbl_yield_result = cu.HederData(PathProperties.local_Header, "sbl_yield_result_h2.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_yield_result_h2.dat").trim();
+                    String sbl_bin1_result = cu.HederData(PathProperties.local_Header, "sbl_bin1_result_h2.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_bin1_result_h2.dat").trim();
+                    String sbl_bin2_result = cu.HederData(PathProperties.local_Header, "sbl_bin2_result_h2.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_bin2_result_h2.dat").trim();
+                    String sbl_bin3_result = cu.HederData(PathProperties.local_Header, "sbl_bin3_result_h2.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_bin3_result_h2.dat").trim();
+                    String sbl_bin4_result = cu.HederData(PathProperties.local_Header, "sbl_bin4_result_h2.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_bin4_result_h2.dat").trim();
+                    String sbl_bin5_result = cu.HederData(PathProperties.local_Header, "sbl_bin5_result_h2.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_bin5_result_h2.dat").trim();
+                    String sbl_bin6_result = cu.HederData(PathProperties.local_Header, "sbl_bin6_result_h2.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_bin6_result_h2.dat").trim();
+                    String sbl_bin7_result = cu.HederData(PathProperties.local_Header, "sbl_bin7_result_h2.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_bin7_result_h2.dat").trim();
+                    String sbl_bin8_result = cu.HederData(PathProperties.local_Header, "sbl_bin8_result_h2.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_bin8_result_h2.dat").trim();
+                    String sbl_bin9_result = cu.HederData(PathProperties.local_Header, "sbl_bin9_result_h2.dat").trim().equals("0") ? "NULL" : cu.HederData(PathProperties.local_Header, "sbl_bin9_result_h2.dat").trim();
+                    
+                    cu.FileNew(PathProperties.local_Header, "test_flow_h2.dat", "CANCEL", false);
+                    
+                    cu.FileNew(PathProperties.local_Header, "bin_in_time_h2.dat", bin_in_time, false);
+                    cu.FileNew(PathProperties.local_Header, "bin_end_time_h2.dat", bin_end_time, false);
+                    cu.FileNew(PathProperties.local_Header, "prelot_end_time_h2.dat", prelot_end_time, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_result_h2.dat", sbl_result, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_yield_limit_h2.dat", sbl_yield_limit, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_sub_bina_counter_h2.dat", sbl_sub_bina_counter, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_sub_bina_limit_h2.dat", sbl_sub_bina_limit, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_sub_binb_counter_h2.dat", sbl_sub_binb_counter, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_sub_binb_limit_h2.dat", sbl_sub_binb_limit, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_bin9_counter_h2.dat", sbl_bin9_counter, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_bin9_limit_h2.dat", sbl_bin9_limit, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_bin8_limit_h2.dat", sbl_bin8_limit, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_yield_result_h2.dat", sbl_yield_result, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_bin1_result_h2.dat", sbl_bin1_result, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_bin2_result_h2.dat", sbl_bin2_result, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_bin3_result_h2.dat", sbl_bin3_result, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_bin4_result_h2.dat", sbl_bin4_result, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_bin5_result_h2.dat", sbl_bin5_result, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_bin6_result_h2.dat", sbl_bin6_result, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_bin7_result_h2.dat", sbl_bin7_result, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_bin8_result_h2.dat", sbl_bin8_result, false);
+                    cu.FileNew(PathProperties.local_Header, "sbl_bin9_result_h2.dat", sbl_bin9_result, false);
                 }
                 
-                cu.Headerdata();
-                String header_data = MainDual.header_data;
-                
-                SimpleDateFormat cancel_sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-                Date cancel_dt = new Date();
-                
-                if (MainDual.main_radio_st1.isSelected()) {
-                    cu.FileNew(PathProperties.ftpcancel, "input_lotid"+MainDual.main_lotno_text_st1.getText()+"_cancel_report-"+cancel_sdf.format(cancel_dt)+".HEADA", header_data, false);
-                    ftpModule.fileCopy(PathProperties.ftpcancel + "input_lotid"+MainDual.main_lotno_text_st1.getText()+"_cancel_report-"+cancel_sdf.format(cancel_dt)+".HEADA", PathProperties.ftppre + "input_lotid"+MainDual.main_lotno_text_st1.getText()+"_cancel_report-"+cancel_sdf.format(cancel_dt)+".HEADA");
-                } else {
-                    cu.FileNew(PathProperties.ftpcancel, "input_lotid"+MainDual.main_lotno_text_st1.getText()+"_cancel_report-"+cancel_sdf.format(cancel_dt)+".HEADB", header_data, false);
-                    ftpModule.fileCopy(PathProperties.ftpcancel + "input_lotid"+MainDual.main_lotno_text_st1.getText()+"_cancel_report-"+cancel_sdf.format(cancel_dt)+".HEADB", PathProperties.ftppre + "input_lotid"+MainDual.main_lotno_text_st1.getText()+"_cancel_report-"+cancel_sdf.format(cancel_dt)+".HEADB");
-                }
-                
+                cu.Sequence(final_end_time_dt, "CANCEL");
+
                 ftpModule.re_test_end_exit = false;
                 ftpModule.FtpServerSend(1);
 
